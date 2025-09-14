@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://speedoodle.vercel.app/sitemap.xml
