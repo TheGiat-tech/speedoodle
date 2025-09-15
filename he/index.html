@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="he" dir="rtl">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Speedoodle 🚀 — Internet Speed Test</title>
-  <meta name="description" content="Speedoodle 🚀 — Real-time download, upload and ping speed test." />
-  <link rel="stylesheet" href="style.css" />
+  <title>Speedoodle 🚀 — בדיקת מהירות אינטרנט</title>
+  <meta name="description" content="Speedoodle 🚀 — בדיקת מהירות הורדה, העלאה ופינג בזמן אמת." />
+  <link rel="stylesheet" href="../style.css" />
   <style>
     body {
       margin: 0; font-family: system-ui, sans-serif;
@@ -28,27 +28,27 @@
     .btn-danger { background:#b91c1c; border-color:#ef4444; }
     .adbar { position:fixed; left:0; right:0; bottom:0; background:#000000cc; color:#ccc; display:flex; justify-content:center; padding:10px; }
     .adslot { width:min(970px,92vw); height:60px; border:1px dashed #94a3b8; display:flex; align-items:center; justify-content:center; }
-    .lang-switch { position:fixed; top:10px; right:10px; }
+    .lang-switch { position:fixed; top:10px; left:10px; }
   </style>
 </head>
 <body>
-  <nav class="lang-switch">English | <a href="?lang=he">עברית</a></nav>
+  <nav class="lang-switch">עברית | <a href="?lang=en">English</a></nav>
   <section class="card">
     <div class="logo">🚀 <span>Speedoodle</span></div>
-    <div class="sub">Your internet speed is</div>
+    <div class="sub">מהירות האינטרנט שלך היא</div>
     <div class="row"><div id="big" class="big">0.0</div><div class="unit">Mbps</div></div>
-    <div id="avgpeak" class="sub">Average: 0.0 Mbps | Peak: 0.0 Mbps</div>
+    <div id="avgpeak" class="sub">ממוצע: 0.0 Mbps | שיא: 0.0 Mbps</div>
     <div class="kpis">
-      <div class="kpi"><h4>Latency</h4><div class="val" id="lat">– ms</div></div>
-      <div class="kpi"><h4>Upload</h4><div class="val" id="up">–</div></div>
+      <div class="kpi"><h4>השהיה</h4><div class="val" id="lat">– ms</div></div>
+      <div class="kpi"><h4>העלאה</h4><div class="val" id="up">–</div></div>
     </div>
-    <div id="status" class="status">Ready</div>
+    <div id="status" class="status">מוכן</div>
     <div class="btns">
-      <button id="start" class="btn">Start Test</button>
-      <button id="stop" class="btn btn-danger" style="display:none">Stop</button>
+      <button id="start" class="btn">התחל בדיקה</button>
+      <button id="stop" class="btn btn-danger" style="display:none">עצור</button>
     </div>
   </section>
-  <div class="adbar"><div class="adslot">Ad space</div></div>
+  <div class="adbar"><div class="adslot">מקום למודעה (Ad Banner)</div></div>
   <script>
     const CF_BASE = "https://speed.cloudflare.com";
     const big=document.getElementById("big"),avgpeak=document.getElementById("avgpeak"),latEl=document.getElementById("lat"),upEl=document.getElementById("up"),statusEl=document.getElementById("status"),startBtn=document.getElementById("start"),stopBtn=document.getElementById("stop");
@@ -59,9 +59,9 @@
     async function downloadTest(base,cancel){let rec=0;const start=performance.now(),stopAt=start+DL_DURATION_MS,warm=start+WARMUP_MS,samples=[];let peak=0;async function one(){while(performance.now()<stopAt&&!cancel()){const url=`${base}/__down?bytes=${CHUNK_BYTES_DL}&ts=${Math.random()}`,r=await fetch(url,{cache:"no-store"});if(!r.ok||!r.body)break;const reader=r.body.getReader();while(true){const {done,value}=await reader.read();if(done)break;rec+=value.byteLength;const now=performance.now();samples.push({t:now,bytes:value.byteLength});while(samples.length&&samples[0].t<now-WINDOW_MS)samples.shift();if(now>warm){const bps=samples.reduce((s,x)=>s+x.bytes,0)*8/(WINDOW_MS/1000);if(bps>peak)peak=bps}}if(performance.now()+80>stopAt)break}}await Promise.allSettled(Array.from({length:PARALLEL_STREAMS},one));const eff=Math.min(warm,stopAt),secs=Math.max(.001,(Math.min(performance.now(),stopAt)-eff)/1000);return{avgBps:(rec*8)/secs,peakBps:peak}}
     async function uploadTest(base,cancel){let sent=0;const stopAt=performance.now()+UL_DURATION_MS,payload=new Uint8Array(CHUNK_BYTES_UP);async function one(){while(performance.now()<stopAt&&!cancel()){const r=await fetch(`${base}/__up?ts=${Math.random()}`,{method:"POST",body:payload,cache:"no-store"});if(!r.ok)break;sent+=payload.byteLength;if(performance.now()+50>stopAt)break}}await Promise.allSettled(Array.from({length:PARALLEL_STREAMS},one));return{bitsPerSec:(sent*8)/(UL_DURATION_MS/1000)}}
     let cancelled=false;function isCancelled(){return cancelled}
-    async function run(){if(startBtn.disabled)return;cancelled=false;startBtn.disabled=true;stopBtn.style.display="inline-block";statusEl.textContent="Measuring latency…";big.textContent="0.0";avgpeak.textContent="Average: 0.0 Mbps | Peak: 0.0 Mbps";latEl.textContent="– ms";upEl.textContent="–";
-      try{const lat=await measureLatency(CF_BASE,3);latEl.textContent=`${formatMs(lat)} ms`;statusEl.textContent="Measuring download…";const dl=await downloadTest(CF_BASE,isCancelled);const peak=Number(humanMbps(dl.peakBps)),avg=Number(humanMbps(dl.avgBps));big.textContent=peak.toFixed(1);avgpeak.textContent=`Average: ${avg.toFixed(1)} Mbps | Peak: ${peak.toFixed(1)} Mbps`;statusEl.textContent="Measuring upload…";const up=await uploadTest(CF_BASE,isCancelled);upEl.textContent=`${Number(humanMbps(up.bitsPerSec)).toFixed(1)} Mbps`;statusEl.textContent=cancelled?"Cancelled":"Done"}catch(e){statusEl.textContent="Error"}finally{startBtn.disabled=false;stopBtn.style.display="none"}}
-    startBtn.addEventListener("click",run);stopBtn.addEventListener("click",()=>{cancelled=true;statusEl.textContent="Cancelled"});
+    async function run(){if(startBtn.disabled)return;cancelled=false;startBtn.disabled=true;stopBtn.style.display="inline-block";statusEl.textContent="בודק השהיה…";big.textContent="0.0";avgpeak.textContent="ממוצע: 0.0 Mbps | שיא: 0.0 Mbps";latEl.textContent="– ms";upEl.textContent="–";
+      try{const lat=await measureLatency(CF_BASE,3);latEl.textContent=`${formatMs(lat)} ms`;statusEl.textContent="מודד הורדה…";const dl=await downloadTest(CF_BASE,isCancelled);const peak=Number(humanMbps(dl.peakBps)),avg=Number(humanMbps(dl.avgBps));big.textContent=peak.toFixed(1);avgpeak.textContent=`ממוצע: ${avg.toFixed(1)} Mbps | שיא: ${peak.toFixed(1)} Mbps`;statusEl.textContent="מודד העלאה…";const up=await uploadTest(CF_BASE,isCancelled);upEl.textContent=`${Number(humanMbps(up.bitsPerSec)).toFixed(1)} Mbps`;statusEl.textContent=cancelled?"בוטל":"סיום"}catch(e){statusEl.textContent="שגיאה"}finally{startBtn.disabled=false;stopBtn.style.display="none"}}
+    startBtn.addEventListener("click",run);stopBtn.addEventListener("click",()=>{cancelled=true;statusEl.textContent="בוטל"});
   </script>
 </body>
 </html>
