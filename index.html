@@ -167,8 +167,12 @@ runBtn?.addEventListener('click', async ()=>{
     });
     dl.to(final.downloadMbps,900); ul.to(final.uploadMbps,900); pg.to(final.pingMs,700);
     const avg=document.getElementById('avg'); if(avg) avg.textContent=`Average: ${final.avg?.toFixed?final.avg.toFixed(1):final.avg||dl.value.toFixed(1)} Mbps | Peak: ${final.peak||Math.max(dl.value,250)} Mbps`;
-  } catch(e){ statusEl.textContent='Error running test'; }
-  finally{ stopUI(); runBtn.disabled = false; }
+    stopUI();
+  } catch(e){
+    stopUI('Error running test');
+  } finally {
+    runBtn.disabled = false;
+  }
 });
 // Optional: auto-start on load
 // document.getElementById('runTest')?.click();
