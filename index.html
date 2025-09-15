@@ -1,69 +1,32 @@
-<!doctype html>
-<html lang="en" dir="ltr">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Speedoodle 🚀 — Internet Speed Test</title>
-  <meta name="description" content="Speedoodle 🚀 — test your download, upload, and ping in real-time." />
-  <link rel="canonical" href="https://speedoodle.com/" />
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      margin: 0; font-family: system-ui, sans-serif;
-      background: linear-gradient(135deg, #0f172a, #1e3a8a); color: #fff;
-      display: flex; justify-content: center; align-items: center; height: 100vh;
-    }
-    .card { background: rgba(255,255,255,0.08); padding: 24px; border-radius: 16px; text-align:center; width: 90%; max-width: 480px; backdrop-filter: blur(10px); }
-    .logo { font-size: 42px; font-weight: 800; display:flex; justify-content:center; gap:10px; }
-    .sub { margin-top: 6px; color: #cbd5e1; }
-    .big { font-size: clamp(72px, 16vw, 180px); font-weight:900; line-height:.9; margin-top:12px; text-shadow:0 2px 0 #fff, 0 20px 60px rgba(14,165,233,0.35); }
-    .unit { font-size: 28px; margin-inline-start: 8px; }
-    .row { display:flex; justify-content:center; align-items:flex-end; }
-    .kpis { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:20px; }
-    .kpi { background: rgba(0,0,0,0.3); padding:12px; border-radius:12px; }
-    .kpi h4 { margin:0 0 6px; font-size:16px; }
-    .kpi .val { font-size:22px; font-weight:700; }
-    .status { margin-top: 14px; color:#94a3b8; }
-    .btns { margin-top:16px; display:flex; gap:12px; justify-content:center; }
-    .btn { padding:10px 18px; border-radius:10px; background:#1e3a8a; color:white; border:1px solid #38bdf8; font-weight:600; cursor:pointer; }
-    .btn-danger { background:#b91c1c; border-color:#ef4444; }
-    .adbar { position:fixed; left:0; right:0; bottom:0; background:#000000cc; color:#ccc; display:flex; justify-content:center; padding:10px; }
-    .adslot { width:min(970px,92vw); height:60px; border:1px dashed #94a3b8; display:flex; align-items:center; justify-content:center; }
-  </style>
+<!doctype html><html lang="en" dir="ltr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Speedoodle 🚀 — Internet Speed Test</title>
+<meta name="description" content="Speedoodle 🚀 — test your download, upload, and ping in real-time.">
+<link rel="canonical" href="https://speedoodle.com/">
+<link rel="stylesheet" href="site.css">
 <!-- AdSense verification -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8054613411767519"
-     crossorigin="anonymous"></script>
-</head>
-<body>
-  <section class="card">
-    <div class="logo">🚀 <span>Speedoodle</span></div>
-    <div class="sub">Your internet speed is</div>
-    <div class="row"><div id="big" class="big">0.0</div><div class="unit">Mbps</div></div>
-    <div id="avgpeak" class="sub">Average: 0.0 Mbps | Peak: 0.0 Mbps</div>
-    <div class="kpis">
-      <div class="kpi"><h4>Latency</h4><div class="val" id="lat">– ms</div></div>
-      <div class="kpi"><h4>Upload</h4><div class="val" id="up">–</div></div>
-    </div>
-    <div id="status" class="status">Ready</div>
-    <div class="btns">
-      <button id="start" class="btn">Start Test</button>
-      <button id="stop" class="btn btn-danger" style="display:none">Stop</button>
-    </div>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8054613411767519" crossorigin="anonymous"></script>
+</head><body>
+<header><a href="./">Speedoodle 🚀</a></header>
+<main class="container">
+  <section id="results">
+    <div class="stat"><span class="label">Download</span><div class="value" id="dl">0</div></div>
+    <div class="stat"><span class="label">Upload</span><div class="value" id="ul">0</div></div>
+    <div class="stat"><span class="label">Ping</span><div class="value" id="pg">0</div></div>
   </section>
-  <div class="adbar"><div class="adslot">Ad slot</div></div>
-  <script>
-    const CF_BASE = "https://speed.cloudflare.com";
-    const big=document.getElementById("big"),avgpeak=document.getElementById("avgpeak"),latEl=document.getElementById("lat"),upEl=document.getElementById("up"),statusEl=document.getElementById("status"),startBtn=document.getElementById("start"),stopBtn=document.getElementById("stop");
-    const PARALLEL_STREAMS=6,DL_DURATION_MS=8000,UL_DURATION_MS=6000,WARMUP_MS=2000,WINDOW_MS=2000,CHUNK_BYTES_DL=5*1024*1024,CHUNK_BYTES_UP=256*1024;
-    function humanMbps(b){return (!b||!isFinite(b))?"0.0":(b/1048576).toFixed(1)}
-    function formatMs(v){return Number.isFinite(v)?v.toFixed(0):"–"}
-    async function measureLatency(base,a=3){const l=[];for(let i=0;i<a;i++){const u=`${base}/__down?bytes=1&ts=${Math.random()}`,t0=performance.now();try{const r=await fetch(u,{cache:"no-store"});if(!r.ok)throw new Error();const t1=performance.now();l.push(t1-t0)}catch{l.push(9999)}}return l.reduce((s,x)=>s+x,0)/l.length}
-    async function downloadTest(base,cancel){let rec=0;const start=performance.now(),stopAt=start+DL_DURATION_MS,warm=start+WARMUP_MS,samples=[];let peak=0;async function one(){while(performance.now()<stopAt&&!cancel()){const url=`${base}/__down?bytes=${CHUNK_BYTES_DL}&ts=${Math.random()}`,r=await fetch(url,{cache:"no-store"});if(!r.ok||!r.body)break;const reader=r.body.getReader();while(true){const {done,value}=await reader.read();if(done)break;rec+=value.byteLength;const now=performance.now();samples.push({t:now,bytes:value.byteLength});while(samples.length&&samples[0].t<now-WINDOW_MS)samples.shift();if(now>warm){const bps=samples.reduce((s,x)=>s+x.bytes,0)*8/(WINDOW_MS/1000);if(bps>peak)peak=bps}}if(performance.now()+80>stopAt)break}}await Promise.allSettled(Array.from({length:PARALLEL_STREAMS},one));const eff=Math.min(warm,stopAt),secs=Math.max(.001,(Math.min(performance.now(),stopAt)-eff)/1000);return{avgBps:(rec*8)/secs,peakBps:peak}}
-    async function uploadTest(base,cancel){let sent=0;const stopAt=performance.now()+UL_DURATION_MS,payload=new Uint8Array(CHUNK_BYTES_UP);async function one(){while(performance.now()<stopAt&&!cancel()){const r=await fetch(`${base}/__up?ts=${Math.random()}`,{method:"POST",body:payload,cache:"no-store"});if(!r.ok)break;sent+=payload.byteLength;if(performance.now()+50>stopAt)break}}await Promise.allSettled(Array.from({length:PARALLEL_STREAMS},one));return{bitsPerSec:(sent*8)/(UL_DURATION_MS/1000)}}
-    let cancelled=false;function isCancelled(){return cancelled}
-    async function run(){if(startBtn.disabled)return;cancelled=false;startBtn.disabled=true;stopBtn.style.display="inline-block";statusEl.textContent="Testing latency…";big.textContent="0.0";avgpeak.textContent="Average: 0.0 Mbps | Peak: 0.0 Mbps";latEl.textContent="– ms";upEl.textContent="–";
-      try{const lat=await measureLatency(CF_BASE,3);latEl.textContent=`${formatMs(lat)} ms`;statusEl.textContent="Measuring download…";const dl=await downloadTest(CF_BASE,isCancelled);const peak=Number(humanMbps(dl.peakBps)),avg=Number(humanMbps(dl.avgBps));big.textContent=peak.toFixed(1);avgpeak.textContent=`Average: ${avg.toFixed(1)} Mbps | Peak: ${peak.toFixed(1)} Mbps`;statusEl.textContent="Measuring upload…";const up=await uploadTest(CF_BASE,isCancelled);upEl.textContent=`${Number(humanMbps(up.bitsPerSec)).toFixed(1)} Mbps`;statusEl.textContent=cancelled?"Cancelled":"Done"}catch(e){statusEl.textContent="Error"}finally{startBtn.disabled=false;stopBtn.style.display="none"}}
-    startBtn.addEventListener("click",run);stopBtn.addEventListener("click",()=>{cancelled=true;statusEl.textContent="Cancelled"});
-  </script>
-</body>
-</html>
+  <button id="runTest">Run Test</button>
+</main>
+<footer><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="about.html">About</a> · <a href="contact.html">Contact</a></footer>
+<script>
+function makeCounter(id,decimals=1){const el=document.getElementById(id);let cur=0;return v=>{const start=cur,diff=v-start,t0=performance.now();function tick(now){const p=Math.min(1,(now-t0)/400);const n=start+diff*p;el.textContent=n.toFixed(decimals);if(p<1)requestAnimationFrame(tick);else cur=v;}requestAnimationFrame(tick);};}
+function ramp(t){document.body.classList.toggle('testing',t);}
+const dl=makeCounter('dl',1),ul=makeCounter('ul',1),pg=makeCounter('pg',0);
+const CF_BASE="https://speed.cloudflare.com",PARALLEL_STREAMS=6,DL_DURATION_MS=8000,UL_DURATION_MS=6000,WARMUP_MS=2000,WINDOW_MS=2000,CHUNK_BYTES_DL=5*1024*1024,CHUNK_BYTES_UP=256*1024;
+function humanMbps(b){return(!b||!isFinite(b))?0:(b/1048576);}
+async function measureLatency(base,a=3){const l=[];for(let i=0;i<a;i++){const u=`${base}/__down?bytes=1&ts=${Math.random()}`,t0=performance.now();try{const r=await fetch(u,{cache:"no-store"});if(!r.ok)throw new Error();const t1=performance.now();l.push(t1-t0);}catch{l.push(9999);}}return l.reduce((s,x)=>s+x,0)/l.length;}
+async function downloadTest(base){let rec=0;const start=performance.now(),stopAt=start+DL_DURATION_MS,warm=start+WARMUP_MS,samples=[];let peak=0;async function one(){while(performance.now()<stopAt){const url=`${base}/__down?bytes=${CHUNK_BYTES_DL}&ts=${Math.random()}`,r=await fetch(url,{cache:"no-store"});if(!r.ok||!r.body)break;const reader=r.body.getReader();while(true){const {done,value}=await reader.read();if(done)break;rec+=value.byteLength;const now=performance.now();samples.push({t:now,bytes:value.byteLength});while(samples.length&&samples[0].t<now-WINDOW_MS)samples.shift();if(now>warm){const bps=samples.reduce((s,x)=>s+x.bytes,0)*8/(WINDOW_MS/1000);if(bps>peak)peak=bps;}}if(performance.now()+80>stopAt)break;}}await Promise.allSettled(Array.from({length:PARALLEL_STREAMS},one));const eff=Math.min(warm,stopAt),secs=Math.max(.001,(Math.min(performance.now(),stopAt)-eff)/1000);return{avgBps:(rec*8)/secs,peakBps:peak};}
+async function uploadTest(base){let sent=0;const stopAt=performance.now()+UL_DURATION_MS,payload=new Uint8Array(CHUNK_BYTES_UP);async function one(){while(performance.now()<stopAt){const r=await fetch(`${base}/__up?ts=${Math.random()}`,{method:"POST",body:payload,cache:"no-store"});if(!r.ok)break;sent+=payload.byteLength;if(performance.now()+50>stopAt)break;}}await Promise.allSettled(Array.from({length:PARALLEL_STREAMS},one));return{bitsPerSec:(sent*8)/(UL_DURATION_MS/1000)};}
+async function runSpeedTest({onProgress}={}){const ping=await measureLatency(CF_BASE,3);onProgress&&onProgress({ping});const dlRes=await downloadTest(CF_BASE);onProgress&&onProgress({download:Number(humanMbps(dlRes.avgBps).toFixed(1))});const upRes=await uploadTest(CF_BASE);onProgress&&onProgress({upload:Number(humanMbps(upRes.bitsPerSec).toFixed(1))});}
+document.getElementById('runTest').addEventListener('click',async()=>{ramp(true);dl(0);ul(0);pg(0);try{await runSpeedTest({onProgress({download,upload,ping}){if(download!=null)dl(download);if(upload!=null)ul(upload);if(ping!=null)pg(ping);}});}finally{ramp(false);}});
+</script>
+</body></html>
