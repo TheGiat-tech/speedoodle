@@ -82,15 +82,23 @@ function makeCounter(selector, decimals=1){
 }
 const body=document.body, statusEl=document.getElementById('status');
 const dl=makeCounter('#dl',1), ul=makeCounter('#ul',1), pg=makeCounter('#pg',0);
-let ramp;
+let rampTimer;
 function startUI(){
-  body.classList.add('testing'); statusEl.textContent='Testing…';
-  clearInterval(ramp);
-  ramp=setInterval(()=>{ dl.to(Math.min(dl.value + Math.random()*20+5, 500), 500);
-                         ul.to(Math.min(ul.value + Math.random()*8+2, 150), 500);
-                         pg.to(Math.max(5, pg.value + (Math.random()*10 - 3)), 400); }, 800);
+  body.classList.add('testing');
+  statusEl.textContent='Testing…';
+  clearInterval(rampTimer);
+  rampTimer=setInterval(()=>{
+    dl.to(Math.min(dl.value + Math.random()*20 + 5, 500), 500);
+    ul.to(Math.min(ul.value + Math.random()*8 + 2, 150), 500);
+    pg.to(Math.max(5, pg.value + (Math.random()*10 - 3)), 400);
+  }, 800);
 }
-function stopUI(){ clearInterval(ramp); body.classList.remove('testing'); statusEl.textContent='Done'; }
+function stopUI(){
+  clearInterval(rampTimer);
+  rampTimer=null;
+  body.classList.remove('testing');
+  statusEl.textContent='Done';
+}
 // Hook your real tester here. Keep stub if none exists.
 async function runSpeedTest({onProgress}={}){
   const CF_BASE = "https://speed.cloudflare.com";
