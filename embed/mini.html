@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Speedoodle Mini</title>
+<style>body{margin:0;font:14px system-ui,Arial,sans-serif}.box{padding:10px;border:1px solid #9993;border-radius:10px;margin:8px}</style>
+</head><body>
+<div class="box">
+  <div>Download: <strong id="dl">--</strong> Mbps</div>
+  <div>Upload: <strong id="ul">--</strong> Mbps</div>
+  <div>Ping: <strong id="pg">--</strong> ms</div>
+  <div style="margin-top:6px"><a href="https://speedoodle.com" target="_blank" rel="noopener">speedoodle.com</a></div>
+</div>
+<script>
+// Placeholder: if you have a public endpoint, fetch & update. For now random demo values:
+const rnd=(a,b)=>Math.round((Math.random()*(b-a)+a)*10)/10;
+document.getElementById('dl').textContent=rnd(50,300);
+document.getElementById('ul').textContent=rnd(10,80);
+document.getElementById('pg').textContent=rnd(8,60);
+</script>
+</body></html>
