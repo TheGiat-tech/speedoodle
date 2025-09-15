@@ -1,0 +1,29 @@
+name: Auto-merge
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review, labeled]
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  automerge:
+    if: >
+      contains(github.event.pull_request.labels.*.name, 'automerge')
+      || startsWith(github.event.pull_request.head.ref, 'codex/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for checks
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 15
+          allowed-conclusions: success
+      - name: Enable & merge (squash)
+        uses: pascalgn/automerge-action@v0.16.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_METHOD: squash
+          MERGE_DELETE_BRANCH: "true"
+          MERGE_RETRIES: "24"
+          MERGE_RETRY_SLEEP: "15s"
+          # will only merge when all required checks are green and reviews (if required) are satisfied
