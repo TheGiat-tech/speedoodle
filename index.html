@@ -80,7 +80,7 @@ function makeCounter(selector, decimals=1){
   }
   return { to, get value(){ return val; } };
 }
-const body=document.body, statusEl=document.getElementById('status');
+const body=document.body, statusEl=document.getElementById('status'), runBtn=document.getElementById('runTest');
 const dl=makeCounter('#dl',1), ul=makeCounter('#ul',1), pg=makeCounter('#pg',0);
 let ramp;
 function startUI(){
@@ -158,7 +158,8 @@ async function runSpeedTest({onProgress}={}){
   const up=humanMbps(ulRes.bitsPerSec);
   return{downloadMbps:peak,uploadMbps:up,pingMs:ping,avg:avg,peak:peak};
 }
-document.getElementById('runTest')?.addEventListener('click', async ()=>{
+runBtn?.addEventListener('click', async ()=>{
+  runBtn.disabled = true;
   startUI();
   try{
     const final = await runSpeedTest({
@@ -167,7 +168,7 @@ document.getElementById('runTest')?.addEventListener('click', async ()=>{
     dl.to(final.downloadMbps,900); ul.to(final.uploadMbps,900); pg.to(final.pingMs,700);
     const avg=document.getElementById('avg'); if(avg) avg.textContent=`Average: ${final.avg?.toFixed?final.avg.toFixed(1):final.avg||dl.value.toFixed(1)} Mbps | Peak: ${final.peak||Math.max(dl.value,250)} Mbps`;
   } catch(e){ statusEl.textContent='Error running test'; }
-  finally{ stopUI(); }
+  finally{ stopUI(); runBtn.disabled = false; }
 });
 // Optional: auto-start on load
 // document.getElementById('runTest')?.click();
