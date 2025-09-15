@@ -1,0 +1,10 @@
+:root { font-family: system-ui, Arial, sans-serif; color-scheme: light dark; }
+body { margin:0; }
+header, footer { padding:16px; text-align:center; }
+a { text-decoration:none; }
+.container { max-width:720px; margin:32px auto; padding:0 16px; line-height:1.6; }
+.card { display:grid; gap:12px; padding:16px; border:1px solid #9993; border-radius:12px; }
+label { display:grid; gap:6px; font-weight:600; }
+input, textarea { padding:10px; border:1px solid #9996; border-radius:8px; }
+button { padding:10px 16px; border:0; border-radius:8px; cursor:pointer; }
+footer a{margin:0 6px;}
