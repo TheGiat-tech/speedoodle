@@ -3,8 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Speedoodle 🚀 — Internet Speed Test</title>
-  <meta name="description" content="Speedoodle 🚀 — test your download, upload, and ping in real-time." />
+  <title>Internet Speed Test | Speedoodle</title>
+  <meta name="description" content="Run a fast, accurate speed test for download, upload, and ping. Mobile-friendly and privacy-first." />
+  <link rel="canonical" href="https://speedoodle.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Speedoodle" />
+  <meta property="og:title" content="Internet Speed Test | Speedoodle" />
+  <meta property="og:description" content="Run a fast, accurate internet speed test: download, upload, ping. Mobile-friendly, privacy-first." />
+  <meta property="og:url" content="https://speedoodle.com/" />
+  <meta property="og:image" content="https://speedoodle.com/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Internet Speed Test | Speedoodle" />
+  <meta name="twitter:description" content="Fast, accurate speed test for download/upload/ping." />
+  <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+  <link rel="preconnect" href="https://googleads.g.doubleclick.net" />
   <link rel="stylesheet" href="style.css" />
   <style>
     body {
@@ -34,6 +46,10 @@
      crossorigin="anonymous"></script>
 </head>
 <body>
+  <section class="hero" style="text-align:center;margin:24px 0;">
+    <h1>Instant Internet Speed Test</h1>
+    <p>Accurate download, upload, and ping — mobile friendly, no install.</p>
+  </section>
   <section class="card">
     <div class="logo">🚀 <span>Speedoodle</span></div>
     <div class="sub">Your internet speed is</div>
@@ -49,6 +65,30 @@
       <button id="stop" class="btn btn-danger" style="display:none">Stop</button>
     </div>
   </section>
+  <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8054613411767519"
+     data-ad-slot="1234567890"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+  <!-- in-content ad -->
+  <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8054613411767519"
+     data-ad-slot="1234567891"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+  <section class="container" style="margin:32px auto;">
+    <h2>FAQ</h2>
+    <details><summary>How accurate is this test?</summary>
+    <p>We run multiple samples and average results. Results may differ from your ISP app due to routing and server location.</p></details>
+    <details><summary>What’s a good ping?</summary>
+    <p>&lt; 30ms is great for gaming/video calls; 30–60ms is fine; &gt; 100ms may feel laggy.</p></details>
+    <details><summary>Why is upload lower than download?</summary>
+    <p>Most consumer plans are asymmetrical; upload is typically a fraction of download.</p></details>
+  </section>
   <div class="adbar"><div class="adslot">Ad slot</div></div>
   <script>
     const CF_BASE = "https://speed.cloudflare.com";
@@ -63,6 +103,17 @@
     async function run(){if(startBtn.disabled)return;cancelled=false;startBtn.disabled=true;stopBtn.style.display="inline-block";statusEl.textContent="Testing latency…";big.textContent="0.0";avgpeak.textContent="Average: 0.0 Mbps | Peak: 0.0 Mbps";latEl.textContent="– ms";upEl.textContent="–";
       try{const lat=await measureLatency(CF_BASE,3);latEl.textContent=`${formatMs(lat)} ms`;statusEl.textContent="Measuring download…";const dl=await downloadTest(CF_BASE,isCancelled);const peak=Number(humanMbps(dl.peakBps)),avg=Number(humanMbps(dl.avgBps));big.textContent=peak.toFixed(1);avgpeak.textContent=`Average: ${avg.toFixed(1)} Mbps | Peak: ${peak.toFixed(1)} Mbps`;statusEl.textContent="Measuring upload…";const up=await uploadTest(CF_BASE,isCancelled);upEl.textContent=`${Number(humanMbps(up.bitsPerSec)).toFixed(1)} Mbps`;statusEl.textContent=cancelled?"Cancelled":"Done"}catch(e){statusEl.textContent="Error"}finally{startBtn.disabled=false;stopBtn.style.display="none"}}
     startBtn.addEventListener("click",run);stopBtn.addEventListener("click",()=>{cancelled=true;statusEl.textContent="Cancelled"});
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Speedoodle",
+    "url": "https://speedoodle.com/",
+    "description": "Instant internet speed test for download, upload, and ping.",
+    "inLanguage": "en",
+    "publisher": { "@type": "Organization", "name": "Speedoodle" }
+  }
   </script>
 </body>
 </html>
