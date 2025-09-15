@@ -1,65 +1,24 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f9f9f9;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  color: #333;
-}
-
-header {
-  padding: 20px;
-  font-size: 24px;
-  font-weight: bold;
-  background: #0d6efd;
-  color: #fff;
-}
-
-.container {
-  margin: 50px auto;
-  max-width: 600px;
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-h1 {
-  font-size: 32px;
-  margin-bottom: 10px;
-}
-
-#speed {
-  font-size: 72px;
-  font-weight: bold;
-  margin: 20px 0;
-  color: #0d6efd;
-}
-
-button {
-  background: #0d6efd;
-  color: #fff;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 6px;
-  font-size: 18px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-button:hover:not(:disabled) {
-  background: #0b5ed7;
-}
-
-button:disabled {
-  background: #888;
-  cursor: not-allowed;
-}
-
-footer {
-  margin-top: 50px;
-  padding: 20px;
-  font-size: 14px;
-  color: #666;
-}
-
+/* Base */
+*{box-sizing:border-box} body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f5f7fb;color:#111;text-align:center}
+header{padding:14px 10px}
+header a{font-weight:800;color:#0d47a1;text-decoration:none}
+header a:hover{text-decoration:underline}
+.container{max-width:900px;margin:22px auto;padding:16px}
+.card{background:#fff;border:1px solid #e7ecf3;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.05);padding:22px}
+h1{font-size:34px;margin:0 0 8px}
+.subtitle{opacity:.75;margin-bottom:14px}
+.brand{font-size:28px;font-weight:800;margin:8px 0 12px}
+.big{font-size:88px;font-weight:900;letter-spacing:-1px;line-height:1;color:#0d47a1}
+.units{font-size:22px;margin-left:6px;color:#333}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+@media (max-width:720px){.big{font-size:58px}.grid{grid-template-columns:1fr}}
+.stat{background:#f1f5f9;border:1px solid #e7ecf3;border-radius:14px;padding:14px}
+.stat .label{font-weight:700;opacity:.7;margin-bottom:6px}
+.stat .value{font-size:34px;font-weight:800}
+button{margin-top:14px;background:#0d47a1;color:#fff;border:0;border-radius:10px;padding:12px 20px;font-weight:700;cursor:pointer}
+button:hover{filter:brightness(1.05)}
+/* testing pulse */
+.testing .big,.testing .stat .value{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.86;transform:scale(.992)}}
+@media (prefers-reduced-motion:reduce){.testing .big,.testing .stat .value{animation:none}}
+footer{margin:18px 0;color:#666}
