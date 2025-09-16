@@ -39,3 +39,5 @@ footer{
 .stat-card .val{font-size:28px;font-weight:800}
 .testing .big-num,.testing .stat-card .val{animation:pulse 1.6s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.9;transform:scale(.992)}}
+.adsbygoogle,#ad-slot-1{position:relative;z-index:1}
+#runTest{position:relative;z-index:2}
