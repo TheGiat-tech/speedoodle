@@ -275,107 +275,66 @@
   </script>
   <script>
 (() => {
-  // ---- Gauge helpers ----
-  const TAU = Math.PI*2, start = -120*Math.PI/180, end = 120*Math.PI/180;
-  const R = 145, CX = 180, CY = 180;
-  const panel = document.getElementById('speed-panel');
-  const gArc = document.getElementById('gArc');
-  const gNeedle = document.getElementById('gNeedle');
-  const gTicks = document.getElementById('gTicks');
+  const get = id => document.getElementById(id);
+  const panel = get('speed-panel'), btn = get('runTest');
+  const dl = get('dl'), ul = get('ul'), pg = get('pg'), avgEl = get('avg'), statusEl = get('status');
+  const gArc = get('gArc'), gNeedle = get('gNeedle'), gTicks = get('gTicks');
+  if (!panel || !btn || !dl || !ul || !pg || !gArc || !gNeedle || !gTicks) { console.warn('[speedoodle] missing DOM ids'); return; }
 
-  function p2a(p){ return start + (end-start)*Math.max(0,Math.min(1,p)); }
-  function xy(a, r=R){ return [CX + r*Math.cos(a), CY + r*Math.sin(a)]; }
-  function arcPath(p){
-    const a = p2a(p), [sx,sy] = xy(start), [ex,ey] = xy(a);
-    const large = (a-start) > Math.PI ? 1 : 0;
-    return `M ${sx} ${sy} A ${R} ${R} 0 ${large} 1 ${ex} ${ey}`;
-  }
+  // Gauge helpers
+  const TAU=Math.PI*2, start=-120*Math.PI/180, end=120*Math.PI/180, R=145, CX=180, CY=180;
+  const p2a = p => start + (end-start)*Math.max(0,Math.min(1,p));
+  const xy = (a, r=R) => [CX + r*Math.cos(a), CY + r*Math.sin(a)];
+  const arcPath = p => { const a=p2a(p), [sx,sy]=xy(start), [ex,ey]=xy(a); const large=(a-start)>Math.PI?1:0; return `M ${sx} ${sy} A ${R} ${R} 0 ${large} 1 ${ex} ${ey}`; };
   // draw ticks once
-  if (gTicks && !gTicks.hasChildNodes()){
-    for(let i=0;i<=12;i++){
-      const t=i/12, a=p2a(t), [ix,iy]=xy(a,R-12), [ox,oy]=xy(a,R);
-      const L=document.createElementNS('http://www.w3.org/2000/svg','line');
-      L.setAttribute('x1',ix);L.setAttribute('y1',iy);L.setAttribute('x2',ox);L.setAttribute('y2',oy);
-      L.setAttribute('class','tick'); gTicks.appendChild(L);
-    }
-  }
-  function setGauge(p){
-    gArc && gArc.setAttribute('d', arcPath(p));
-    const deg = -120 + 240*Math.max(0,Math.min(1,p));
-    if (gNeedle) gNeedle.style.transform = `rotate(${deg}deg)`;
-  }
+  if (!gTicks.hasChildNodes()) for (let i=0;i<=12;i++){ const t=i/12, a=p2a(t), [ix,iy]=xy(a,R-12), [ox,oy]=xy(a,R); const L=document.createElementNS('http://www.w3.org/2000/svg','line'); L.setAttribute('x1',ix);L.setAttribute('y1',iy);L.setAttribute('x2',ox);L.setAttribute('y2',oy); L.setAttribute('class','tick'); gTicks.appendChild(L); }
+  const setGauge = p => { gArc.setAttribute('d', arcPath(p)); const deg=-120 + 240*Math.max(0,Math.min(1,p)); gNeedle.style.transform=`rotate(${deg}deg)`; };
 
-  // ---- Numbers count-up ----
-  const dl = document.getElementById('dl');
-  const ul = document.getElementById('ul');
-  const pg = document.getElementById('pg');
-  const avgEl = document.getElementById('avg');
-  const statusEl = document.getElementById('status');
-  const btn = document.getElementById('runTest');
-
-  function animateTo(el, target, {decimals=1, duration=700}={}){
-    const from = parseFloat((el.textContent||'0').replace(/[^0-9.]/g,'')) || 0;
-    const t0 = performance.now();
-    const ease = t => 1 - Math.pow(1-t,3);
-    function frame(now){
-      const k = Math.min(1,(now-t0)/duration);
-      const v = from + (target-from)*ease(k);
-      el.textContent = decimals ? v.toFixed(decimals) : Math.round(v);
-      if(k<1) requestAnimationFrame(frame);
-    }
+  // Count-up
+  const animateTo = (el, target, {decimals=1, duration=700}={})=>{
+    const from = parseFloat((el.textContent||'0').replace(/[^0-9.]/g,'')) || 0, t0 = performance.now();
+    const ease = t => 1-Math.pow(1-t,3);
+    const frame = now => { const k=Math.min(1,(now-t0)/duration), v = from+(target-from)*ease(k); el.textContent = decimals ? v.toFixed(decimals) : Math.round(v); if(k<1) requestAnimationFrame(frame); };
     requestAnimationFrame(frame);
-  }
-  function pFromMbps(mbps){ const soft=350; return Math.tanh((mbps||0)/soft); }
+  };
+  const pFromMbps = mbps => Math.tanh((mbps||0)/350);
 
+  // Demo fallback if no real test
   async function runDemo(onProgress){
-    // סימולציה – משמשת רק אם אין פונקציה אמיתית
     let d=0,u=0,p=40,avg=0,peak=0;
-    for(let i=0;i<8;i++){
-      await new Promise(r=>setTimeout(r, 420+Math.random()*260));
-      d += 20 + Math.random()*50; u += 4 + Math.random()*10; p = Math.max(5, p - (2+Math.random()*8));
-      avg = avg ? (avg*0.7 + d*0.3) : d; peak = Math.max(peak,d);
-      onProgress({d,u,p,avg,peak});
-    }
+    for(let i=0;i<8;i++){ await new Promise(r=>setTimeout(r,420+Math.random()*260)); d+=20+Math.random()*50; u+=4+Math.random()*10; p=Math.max(5,p-(2+Math.random()*8)); avg=avg?(avg*0.7+d*0.3):d; peak=Math.max(peak,d); onProgress({d,u,p,avg,peak}); }
     return {downloadMbps:d, uploadMbps:u, pingMs:p, avg, peak};
   }
 
   async function startTest(){
-    if (!btn) return;
-    panel?.classList.add('testing'); btn.disabled = true; statusEl.textContent = 'Testing…';
-
+    panel.classList.add('testing'); btn.disabled=true; statusEl && (statusEl.textContent='Testing…');
     const onProgress = ({d,u,p,avg,peak})=>{
-      if (typeof d === 'number'){ animateTo(dl,d,{duration:600}); setGauge(pFromMbps(d)); }
-      if (typeof u === 'number'){ animateTo(ul,u,{duration:600}); }
-      if (typeof p === 'number'){ animateTo(pg,p,{duration:600,decimals:0}); }
-      if (avgEl && (avg||peak)) avgEl.textContent = `Average: ${(avg||0).toFixed(1)} Mbps | Peak: ${(peak||0).toFixed(1)} Mbps`;
+      if (typeof d==='number'){ animateTo(dl,d,{duration:600}); setGauge(pFromMbps(d)); }
+      if (typeof u==='number'){ animateTo(ul,u,{duration:600}); }
+      if (typeof p==='number'){ animateTo(pg,p,{duration:600,decimals:0}); }
+      if (avgEl) avgEl.textContent = `Average: ${(avg||0).toFixed(1)} Mbps | Peak: ${(peak||0).toFixed(1)} Mbps`;
     };
-
     try{
-      // אם קיימת פונקציה אמיתית מהקוד שלך – נשתמש בה
-      let final;
-      if (typeof window.runSpeedTest === 'function'){
-        final = await window.runSpeedTest({ onProgress });
-      } else {
-        final = await runDemo(onProgress);
-      }
-      // תצוגה סופית
-      animateTo(dl, final.downloadMbps || 0, {duration:900});
-      animateTo(ul, final.uploadMbps || 0, {duration:900});
-      animateTo(pg, final.pingMs || 0, {duration:900,decimals:0});
-      setGauge(pFromMbps(final.downloadMbps || 0));
-      if (avgEl) avgEl.textContent =
-        `Average: ${(final.avg ?? (parseFloat(dl.textContent)||0)).toFixed(1)} Mbps | Peak: ${(final.peak ?? parseFloat(dl.textContent)||0).toFixed(1)} Mbps`;
-      statusEl.textContent = 'Done';
-    } catch(e){
-      statusEl.textContent = 'Error running test';
-    } finally {
-      panel?.classList.remove('testing'); btn.disabled = false;
-    }
+      const final = (typeof window.runSpeedTest==='function')
+        ? await window.runSpeedTest({ onProgress })
+        : await runDemo(onProgress);
+      animateTo(dl, final.downloadMbps||0, {duration:900});
+      animateTo(ul, final.uploadMbps||0, {duration:900});
+      animateTo(pg, final.pingMs||0, {duration:900,decimals:0});
+      setGauge(pFromMbps(final.downloadMbps||0));
+      if (avgEl) avgEl.textContent = `Average: ${(final.avg ?? parseFloat(dl.textContent)||0).toFixed(1)} Mbps | Peak: ${(final.peak ?? parseFloat(dl.textContent)||0).toFixed(1)} Mbps`;
+      statusEl && (statusEl.textContent='Done');
+    } catch(e){ console.error(e); statusEl && (statusEl.textContent='Error running test'); }
+    finally{ panel.classList.remove('testing'); btn.disabled=false; }
   }
 
+  btn.addEventListener('click', startTest);
+  btn.dataset.speedHandler = 'iife';
   window.startTest = startTest;
-  // init
+  window.speedoodleGaugeBound = true;
   setGauge(0);
+  // סמן שהסקריפט נטען
+  console.info('[speedoodle] gauge script ready');
 })();
   </script>
 <script>
@@ -385,6 +344,7 @@
     const btn=document.getElementById('runTest');
     if(!btn) return;
     btn.type='button';
+    if (window.speedoodleGaugeBound) return;
     btn.addEventListener('click', async ()=>{
       try{
         btn.disabled=true;
