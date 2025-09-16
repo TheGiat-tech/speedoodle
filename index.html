@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en" dir="ltr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Speedoodle 🚀 — Internet Speed Test</title>
   <meta name="description" content="Speedoodle 🚀 — test your download, upload, and ping in real-time." />
-  <link rel="stylesheet" href="site.css" />
+  <link rel="stylesheet" href="site.css">
   <style>
     body{
       margin:0;
@@ -378,30 +378,24 @@
   setGauge(0);
 })();
   </script>
-  <script>
-  (function(){
-    function ready(fn){
-      document.readyState!=='loading' ? fn() : document.addEventListener('DOMContentLoaded',fn);
-    }
-    ready(function(){
-      const btn = document.getElementById('runTest');
-      if(!btn){ console.warn('runTest button missing'); return; }
-      btn.type = 'button';
-      btn.addEventListener('click', async () => {
-        try {
-          btn.disabled = true;
-          if (typeof window.startTest === 'function') {
-            await window.startTest();
-          } else if (typeof window.runSpeedTest === 'function') {
-            await window.runSpeedTest({});
-          } else {
-            await new Promise(r => setTimeout(r, 800));
-          }
-        } catch(err){ console.error(err); }
-        finally { btn.disabled = false; }
-      });
+<script>
+(function(){
+  function ready(fn){document.readyState!=='loading'?fn():document.addEventListener('DOMContentLoaded',fn);}
+  ready(function(){
+    const btn=document.getElementById('runTest');
+    if(!btn) return;
+    btn.type='button';
+    btn.addEventListener('click', async ()=>{
+      try{
+        btn.disabled=true;
+        if (typeof window.startTest==='function') await window.startTest();
+        else if (typeof window.runSpeedTest==='function') await window.runSpeedTest({});
+        else await new Promise(r=>setTimeout(r,800)); // גיבוי קצר
+      }catch(e){ console.error(e); }
+      finally{ btn.disabled=false; }
     });
-  })();
-  </script>
+  });
+})();
+</script>
 </body>
 </html>
