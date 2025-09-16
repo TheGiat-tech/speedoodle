@@ -117,7 +117,7 @@
       </div>
 
       <div id="status" class="subtitle" style="margin-top:10px">Ready</div>
-      <button id="runTest">Start Test</button>
+      <button id="runTest" type="button">Start Test</button>
     </section>
   </main>
   <div class="adbar"><div class="adslot">Ad slot</div></div>
@@ -373,10 +373,35 @@
     }
   }
 
-  btn?.addEventListener('click', startTest);
+  window.startTest = startTest;
   // init
   setGauge(0);
 })();
+  </script>
+  <script>
+  (function(){
+    function ready(fn){
+      document.readyState!=='loading' ? fn() : document.addEventListener('DOMContentLoaded',fn);
+    }
+    ready(function(){
+      const btn = document.getElementById('runTest');
+      if(!btn){ console.warn('runTest button missing'); return; }
+      btn.type = 'button';
+      btn.addEventListener('click', async () => {
+        try {
+          btn.disabled = true;
+          if (typeof window.startTest === 'function') {
+            await window.startTest();
+          } else if (typeof window.runSpeedTest === 'function') {
+            await window.runSpeedTest({});
+          } else {
+            await new Promise(r => setTimeout(r, 800));
+          }
+        } catch(err){ console.error(err); }
+        finally { btn.disabled = false; }
+      });
+    });
+  })();
   </script>
 </body>
 </html>
