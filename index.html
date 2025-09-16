@@ -5,61 +5,382 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Speedoodle 🚀 — Internet Speed Test</title>
   <meta name="description" content="Speedoodle 🚀 — test your download, upload, and ping in real-time." />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="site.css" />
   <style>
-    body {
-      margin: 0; font-family: system-ui, sans-serif;
-      background: linear-gradient(135deg, #0f172a, #1e3a8a); color: #fff;
-      display: flex; justify-content: center; align-items: center; height: 100vh;
+    body{
+      margin:0;
+      font-family:system-ui,sans-serif;
+      background:linear-gradient(180deg,#e2e8f0 0%,#f8fafc 40%,#ffffff 100%);
+      color:var(--text);
+      min-height:100vh;
     }
-    .card { background: rgba(255,255,255,0.08); padding: 24px; border-radius: 16px; text-align:center; width: 90%; max-width: 480px; backdrop-filter: blur(10px); }
-    .logo { font-size: 42px; font-weight: 800; display:flex; justify-content:center; gap:10px; }
-    .sub { margin-top: 6px; color: #cbd5e1; }
-    .big { font-size: clamp(72px, 16vw, 180px); font-weight:900; line-height:.9; margin-top:12px; text-shadow:0 2px 0 #fff, 0 20px 60px rgba(14,165,233,0.35); }
-    .unit { font-size: 28px; margin-inline-start: 8px; }
-    .row { display:flex; justify-content:center; align-items:flex-end; }
-    .kpis { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:20px; }
-    .kpi { background: rgba(0,0,0,0.3); padding:12px; border-radius:12px; }
-    .kpi h4 { margin:0 0 6px; font-size:16px; }
-    .kpi .val { font-size:22px; font-weight:700; }
-    .status { margin-top: 14px; color:#94a3b8; }
-    .btns { margin-top:16px; display:flex; gap:12px; justify-content:center; }
-    .btn { padding:10px 18px; border-radius:10px; background:#1e3a8a; color:white; border:1px solid #38bdf8; font-weight:600; cursor:pointer; }
-    .btn-danger { background:#b91c1c; border-color:#ef4444; }
-    .adbar { position:fixed; left:0; right:0; bottom:0; background:#000000cc; color:#ccc; display:flex; justify-content:center; padding:10px; }
-    .adslot { width:min(970px,92vw); height:60px; border:1px dashed #94a3b8; display:flex; align-items:center; justify-content:center; }
+    main.container{
+      max-width:960px;
+      margin:0 auto;
+      padding:48px 16px 160px;
+      display:flex;
+      justify-content:center;
+    }
+    #speed-panel.card{
+      width:min(100%,620px);
+      background:#fff;
+      border-radius:20px;
+      border:1px solid #e2e8f0;
+      box-shadow:0 24px 60px rgba(15,23,42,0.08);
+      padding:28px 32px;
+    }
+    .brand{
+      font-size:32px;
+      font-weight:800;
+    }
+    .subtitle{
+      margin-top:6px;
+      color:var(--muted);
+      font-weight:600;
+    }
+    button#runTest{
+      margin-top:18px;
+      padding:14px 26px;
+      font-size:18px;
+      font-weight:700;
+      color:#fff;
+      background:var(--accent);
+      border:none;
+      border-radius:999px;
+      cursor:pointer;
+      box-shadow:0 12px 32px rgba(37,99,235,0.35);
+      transition:transform .2s ease,box-shadow .2s ease,opacity .2s ease;
+    }
+    button#runTest:hover:not(:disabled){
+      transform:translateY(-1px);
+      box-shadow:0 16px 36px rgba(37,99,235,0.4);
+    }
+    button#runTest:disabled{
+      opacity:.65;
+      cursor:not-allowed;
+      box-shadow:none;
+    }
+    .adbar{
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      background:#0f172acc;
+      color:#cbd5e1;
+      display:flex;
+      justify-content:center;
+      padding:10px;
+      backdrop-filter:blur(12px);
+    }
+    .adslot{
+      width:min(970px,92vw);
+      height:60px;
+      border:1px dashed #94a3b8;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:600;
+      letter-spacing:.04em;
+    }
   </style>
 </head>
 <body>
-  <section class="card">
-    <div class="logo">🚀 <span>Speedoodle</span></div>
-    <div class="sub">Your internet speed is</div>
-    <div class="row"><div id="big" class="big">0.0</div><div class="unit">Mbps</div></div>
-    <div id="avgpeak" class="sub">Average: 0.0 Mbps | Peak: 0.0 Mbps</div>
-    <div class="kpis">
-      <div class="kpi"><h4>Latency</h4><div class="val" id="lat">– ms</div></div>
-      <div class="kpi"><h4>Upload</h4><div class="val" id="up">–</div></div>
-    </div>
-    <div id="status" class="status">Ready</div>
-    <div class="btns">
-      <button id="start" class="btn">Start Test</button>
-      <button id="stop" class="btn btn-danger" style="display:none">Stop</button>
-    </div>
-  </section>
+  <main class="container">
+    <section id="speed-panel" class="card" style="text-align:center">
+      <div class="brand">🚀 Speedoodle</div>
+
+      <!-- Gauge -->
+      <div class="gauge-wrap">
+        <div class="gauge">
+          <svg viewBox="0 0 360 360" width="100%" height="100%" aria-hidden="true">
+            <g transform="translate(180 180)" id="gTicks"></g>
+            <circle class="ring" cx="180" cy="180" r="145"></circle>
+            <path id="gArc" class="arc" d=""></path>
+            <g id="gNeedle" class="needle">
+              <line x1="180" y1="180" x2="180" y2="50" stroke="#22d3ee" stroke-width="6" stroke-linecap="round"></line>
+              <circle cx="180" cy="180" r="7" fill="#22d3ee"></circle>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- מספר מרכזי -->
+      <div style="margin-top:8px">
+        <span id="dl" class="big-num">0.0</span><span class="units">Mbps</span>
+      </div>
+      <div id="avg" class="subtitle">Average: 0.0 Mbps | Peak: 0.0 Mbps</div>
+
+      <!-- סטטוסים משניים -->
+      <div class="grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:520px;margin:12px auto 0">
+        <div class="stat-card"><div class="label">Latency</div><div class="val"><span id="pg">—</span> ms</div></div>
+        <div class="stat-card"><div class="label">Upload</div><div class="val"><span id="ul">—</span> Mbps</div></div>
+      </div>
+
+      <div id="status" class="subtitle" style="margin-top:10px">Ready</div>
+      <button id="runTest">Start Test</button>
+    </section>
+  </main>
   <div class="adbar"><div class="adslot">Ad slot</div></div>
   <script>
     const CF_BASE = "https://speed.cloudflare.com";
-    const big=document.getElementById("big"),avgpeak=document.getElementById("avgpeak"),latEl=document.getElementById("lat"),upEl=document.getElementById("up"),statusEl=document.getElementById("status"),startBtn=document.getElementById("start"),stopBtn=document.getElementById("stop");
-    const PARALLEL_STREAMS=6,DL_DURATION_MS=8000,UL_DURATION_MS=6000,WARMUP_MS=2000,WINDOW_MS=2000,CHUNK_BYTES_DL=5*1024*1024,CHUNK_BYTES_UP=256*1024;
-    function humanMbps(b){return (!b||!isFinite(b))?"0.0":(b/1048576).toFixed(1)}
-    function formatMs(v){return Number.isFinite(v)?v.toFixed(0):"–"}
-    async function measureLatency(base,a=3){const l=[];for(let i=0;i<a;i++){const u=`${base}/__down?bytes=1&ts=${Math.random()}`,t0=performance.now();try{const r=await fetch(u,{cache:"no-store"});if(!r.ok)throw new Error();const t1=performance.now();l.push(t1-t0)}catch{l.push(9999)}}return l.reduce((s,x)=>s+x,0)/l.length}
-    async function downloadTest(base,cancel){let rec=0;const start=performance.now(),stopAt=start+DL_DURATION_MS,warm=start+WARMUP_MS,samples=[];let peak=0;async function one(){while(performance.now()<stopAt&&!cancel()){const url=`${base}/__down?bytes=${CHUNK_BYTES_DL}&ts=${Math.random()}`,r=await fetch(url,{cache:"no-store"});if(!r.ok||!r.body)break;const reader=r.body.getReader();while(true){const {done,value}=await reader.read();if(done)break;rec+=value.byteLength;const now=performance.now();samples.push({t:now,bytes:value.byteLength});while(samples.length&&samples[0].t<now-WINDOW_MS)samples.shift();if(now>warm){const bps=samples.reduce((s,x)=>s+x.bytes,0)*8/(WINDOW_MS/1000);if(bps>peak)peak=bps}}if(performance.now()+80>stopAt)break}}await Promise.allSettled(Array.from({length:PARALLEL_STREAMS},one));const eff=Math.min(warm,stopAt),secs=Math.max(.001,(Math.min(performance.now(),stopAt)-eff)/1000);return{avgBps:(rec*8)/secs,peakBps:peak}}
-    async function uploadTest(base,cancel){let sent=0;const stopAt=performance.now()+UL_DURATION_MS,payload=new Uint8Array(CHUNK_BYTES_UP);async function one(){while(performance.now()<stopAt&&!cancel()){const r=await fetch(`${base}/__up?ts=${Math.random()}`,{method:"POST",body:payload,cache:"no-store"});if(!r.ok)break;sent+=payload.byteLength;if(performance.now()+50>stopAt)break}}await Promise.allSettled(Array.from({length:PARALLEL_STREAMS},one));return{bitsPerSec:(sent*8)/(UL_DURATION_MS/1000)}}
-    let cancelled=false;function isCancelled(){return cancelled}
-    async function run(){if(startBtn.disabled)return;cancelled=false;startBtn.disabled=true;stopBtn.style.display="inline-block";statusEl.textContent="Testing latency…";big.textContent="0.0";avgpeak.textContent="Average: 0.0 Mbps | Peak: 0.0 Mbps";latEl.textContent="– ms";upEl.textContent="–";
-      try{const lat=await measureLatency(CF_BASE,3);latEl.textContent=`${formatMs(lat)} ms`;statusEl.textContent="Measuring download…";const dl=await downloadTest(CF_BASE,isCancelled);const peak=Number(humanMbps(dl.peakBps)),avg=Number(humanMbps(dl.avgBps));big.textContent=peak.toFixed(1);avgpeak.textContent=`Average: ${avg.toFixed(1)} Mbps | Peak: ${peak.toFixed(1)} Mbps`;statusEl.textContent="Measuring upload…";const up=await uploadTest(CF_BASE,isCancelled);upEl.textContent=`${Number(humanMbps(up.bitsPerSec)).toFixed(1)} Mbps`;statusEl.textContent=cancelled?"Cancelled":"Done"}catch(e){statusEl.textContent="Error"}finally{startBtn.disabled=false;stopBtn.style.display="none"}}
-    startBtn.addEventListener("click",run);stopBtn.addEventListener("click",()=>{cancelled=true;statusEl.textContent="Cancelled"});
+    const PARALLEL_STREAMS = 6;
+    const DL_DURATION_MS = 8000;
+    const UL_DURATION_MS = 6000;
+    const WARMUP_MS = 2000;
+    const WINDOW_MS = 2000;
+    const CHUNK_BYTES_DL = 5 * 1024 * 1024;
+    const CHUNK_BYTES_UP = 256 * 1024;
+    const BITS_PER_MEG = 1024 * 1024;
+
+    function toMbps(bps) {
+      return bps / BITS_PER_MEG;
+    }
+
+    async function measureLatency(base, attempts = 3) {
+      const samples = [];
+      for (let i = 0; i < attempts; i++) {
+        const url = `${base}/__down?bytes=1&ts=${Math.random()}`;
+        const t0 = performance.now();
+        try {
+          const res = await fetch(url, { cache: "no-store" });
+          if (!res.ok) throw new Error("Latency fetch failed");
+          const t1 = performance.now();
+          samples.push(t1 - t0);
+        } catch {
+          samples.push(9999);
+        }
+      }
+      const total = samples.reduce((sum, v) => sum + v, 0);
+      return total / samples.length;
+    }
+
+    async function downloadTest(base, { onSample } = {}) {
+      let received = 0;
+      let peak = 0;
+      let windowBytes = 0;
+      let bytesAfterWarm = 0;
+      const start = performance.now();
+      const stopAt = start + DL_DURATION_MS;
+      const warmAt = start + WARMUP_MS;
+      const samples = [];
+
+      async function oneStream() {
+        while (performance.now() < stopAt) {
+          const url = `${base}/__down?bytes=${CHUNK_BYTES_DL}&ts=${Math.random()}`;
+          const res = await fetch(url, { cache: "no-store" });
+          if (!res.ok || !res.body) break;
+          const reader = res.body.getReader();
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            const chunkBytes = value.byteLength;
+            received += chunkBytes;
+            const now = performance.now();
+            samples.push({ t: now, bytes: chunkBytes });
+            windowBytes += chunkBytes;
+            while (samples.length && samples[0].t < now - WINDOW_MS) {
+              windowBytes -= samples[0].bytes;
+              samples.shift();
+            }
+            if (now > warmAt) {
+              bytesAfterWarm += chunkBytes;
+              const bps = windowBytes * 8 / (WINDOW_MS / 1000);
+              if (bps > peak) peak = bps;
+              const elapsed = Math.max(0.001, (now - warmAt) / 1000);
+              const avgBps = (bytesAfterWarm * 8) / elapsed;
+              if (typeof onSample === "function") {
+                onSample({
+                  mbps: toMbps(bps),
+                  avgMbps: toMbps(avgBps),
+                  peakMbps: toMbps(peak)
+                });
+              }
+            }
+            if (performance.now() + 80 > stopAt) break;
+          }
+          if (performance.now() + 80 > stopAt) break;
+        }
+      }
+
+      await Promise.allSettled(Array.from({ length: PARALLEL_STREAMS }, () => oneStream()));
+      const effectiveStart = Math.min(warmAt, stopAt);
+      const effectiveEnd = Math.min(performance.now(), stopAt);
+      const seconds = Math.max(0.001, (effectiveEnd - effectiveStart) / 1000);
+      return {
+        avgBps: (received * 8) / seconds,
+        peakBps: peak
+      };
+    }
+
+    async function uploadTest(base, { onSample } = {}) {
+      let sent = 0;
+      const stopAt = performance.now() + UL_DURATION_MS;
+      const payload = new Uint8Array(CHUNK_BYTES_UP);
+      const start = performance.now();
+
+      async function oneStream() {
+        while (performance.now() < stopAt) {
+          const res = await fetch(`${base}/__up?ts=${Math.random()}`, {
+            method: "POST",
+            body: payload,
+            cache: "no-store"
+          });
+          if (!res.ok) break;
+          sent += payload.byteLength;
+          if (typeof onSample === "function") {
+            const elapsed = Math.max(0.001, (performance.now() - start) / 1000);
+            const bps = (sent * 8) / elapsed;
+            onSample(toMbps(bps));
+          }
+          if (performance.now() + 50 > stopAt) break;
+        }
+      }
+
+      await Promise.allSettled(Array.from({ length: PARALLEL_STREAMS }, () => oneStream()));
+      return {
+        bitsPerSec: (sent * 8) / (UL_DURATION_MS / 1000)
+      };
+    }
+
+    window.runSpeedTest = async function ({ onProgress } = {}) {
+      const progress = typeof onProgress === "function" ? onProgress : () => {};
+      const pingMs = await measureLatency(CF_BASE, 3);
+      if (Number.isFinite(pingMs)) {
+        progress({ p: pingMs });
+      }
+
+      const download = await downloadTest(CF_BASE, {
+        onSample: ({ mbps, avgMbps, peakMbps }) => {
+          progress({ d: mbps, avg: avgMbps, peak: peakMbps });
+        }
+      });
+      const avgMbps = toMbps(download.avgBps);
+      const peakMbps = toMbps(download.peakBps);
+      progress({ d: peakMbps, avg: avgMbps, peak: peakMbps });
+
+      const upload = await uploadTest(CF_BASE, {
+        onSample: (mbps) => progress({ u: mbps })
+      });
+      const uploadMbps = toMbps(upload.bitsPerSec);
+      progress({ u: uploadMbps });
+
+      return {
+        downloadMbps: peakMbps,
+        uploadMbps,
+        pingMs,
+        avg: avgMbps,
+        peak: peakMbps
+      };
+    };
+  </script>
+  <script>
+(() => {
+  // ---- Gauge helpers ----
+  const TAU = Math.PI*2, start = -120*Math.PI/180, end = 120*Math.PI/180;
+  const R = 145, CX = 180, CY = 180;
+  const panel = document.getElementById('speed-panel');
+  const gArc = document.getElementById('gArc');
+  const gNeedle = document.getElementById('gNeedle');
+  const gTicks = document.getElementById('gTicks');
+
+  function p2a(p){ return start + (end-start)*Math.max(0,Math.min(1,p)); }
+  function xy(a, r=R){ return [CX + r*Math.cos(a), CY + r*Math.sin(a)]; }
+  function arcPath(p){
+    const a = p2a(p), [sx,sy] = xy(start), [ex,ey] = xy(a);
+    const large = (a-start) > Math.PI ? 1 : 0;
+    return `M ${sx} ${sy} A ${R} ${R} 0 ${large} 1 ${ex} ${ey}`;
+  }
+  // draw ticks once
+  if (gTicks && !gTicks.hasChildNodes()){
+    for(let i=0;i<=12;i++){
+      const t=i/12, a=p2a(t), [ix,iy]=xy(a,R-12), [ox,oy]=xy(a,R);
+      const L=document.createElementNS('http://www.w3.org/2000/svg','line');
+      L.setAttribute('x1',ix);L.setAttribute('y1',iy);L.setAttribute('x2',ox);L.setAttribute('y2',oy);
+      L.setAttribute('class','tick'); gTicks.appendChild(L);
+    }
+  }
+  function setGauge(p){
+    gArc && gArc.setAttribute('d', arcPath(p));
+    const deg = -120 + 240*Math.max(0,Math.min(1,p));
+    if (gNeedle) gNeedle.style.transform = `rotate(${deg}deg)`;
+  }
+
+  // ---- Numbers count-up ----
+  const dl = document.getElementById('dl');
+  const ul = document.getElementById('ul');
+  const pg = document.getElementById('pg');
+  const avgEl = document.getElementById('avg');
+  const statusEl = document.getElementById('status');
+  const btn = document.getElementById('runTest');
+
+  function animateTo(el, target, {decimals=1, duration=700}={}){
+    const from = parseFloat((el.textContent||'0').replace(/[^0-9.]/g,'')) || 0;
+    const t0 = performance.now();
+    const ease = t => 1 - Math.pow(1-t,3);
+    function frame(now){
+      const k = Math.min(1,(now-t0)/duration);
+      const v = from + (target-from)*ease(k);
+      el.textContent = decimals ? v.toFixed(decimals) : Math.round(v);
+      if(k<1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  function pFromMbps(mbps){ const soft=350; return Math.tanh((mbps||0)/soft); }
+
+  async function runDemo(onProgress){
+    // סימולציה – משמשת רק אם אין פונקציה אמיתית
+    let d=0,u=0,p=40,avg=0,peak=0;
+    for(let i=0;i<8;i++){
+      await new Promise(r=>setTimeout(r, 420+Math.random()*260));
+      d += 20 + Math.random()*50; u += 4 + Math.random()*10; p = Math.max(5, p - (2+Math.random()*8));
+      avg = avg ? (avg*0.7 + d*0.3) : d; peak = Math.max(peak,d);
+      onProgress({d,u,p,avg,peak});
+    }
+    return {downloadMbps:d, uploadMbps:u, pingMs:p, avg, peak};
+  }
+
+  async function startTest(){
+    if (!btn) return;
+    panel?.classList.add('testing'); btn.disabled = true; statusEl.textContent = 'Testing…';
+
+    const onProgress = ({d,u,p,avg,peak})=>{
+      if (typeof d === 'number'){ animateTo(dl,d,{duration:600}); setGauge(pFromMbps(d)); }
+      if (typeof u === 'number'){ animateTo(ul,u,{duration:600}); }
+      if (typeof p === 'number'){ animateTo(pg,p,{duration:600,decimals:0}); }
+      if (avgEl && (avg||peak)) avgEl.textContent = `Average: ${(avg||0).toFixed(1)} Mbps | Peak: ${(peak||0).toFixed(1)} Mbps`;
+    };
+
+    try{
+      // אם קיימת פונקציה אמיתית מהקוד שלך – נשתמש בה
+      let final;
+      if (typeof window.runSpeedTest === 'function'){
+        final = await window.runSpeedTest({ onProgress });
+      } else {
+        final = await runDemo(onProgress);
+      }
+      // תצוגה סופית
+      animateTo(dl, final.downloadMbps || 0, {duration:900});
+      animateTo(ul, final.uploadMbps || 0, {duration:900});
+      animateTo(pg, final.pingMs || 0, {duration:900,decimals:0});
+      setGauge(pFromMbps(final.downloadMbps || 0));
+      if (avgEl) {
+        const currentDl = parseFloat(dl.textContent) || 0;
+        const avgVal = (typeof final.avg === 'number' && !Number.isNaN(final.avg)) ? final.avg : currentDl;
+        const peakVal = (typeof final.peak === 'number' && !Number.isNaN(final.peak)) ? final.peak : currentDl;
+        avgEl.textContent = `Average: ${avgVal.toFixed(1)} Mbps | Peak: ${peakVal.toFixed(1)} Mbps`;
+      }
+      statusEl.textContent = 'Done';
+    } catch(e){
+      statusEl.textContent = 'Error running test';
+    } finally {
+      panel?.classList.remove('testing'); btn.disabled = false;
+    }
+  }
+
+  btn?.addEventListener('click', startTest);
+  // init
+  setGauge(0);
+})();
   </script>
 </body>
 </html>
