@@ -3,20 +3,21 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Video Call Speed Test 🚀 | Speedoodle</title>
-  <meta name="description" content="Check if your internet is ready for Zoom, Google Meet, or Teams calls. Speedoodle 🚀 runs a quick speed test tailored for video conferencing stability." />
-  <meta name="keywords" content="video call speed test, zoom speed test, google meet speed test, microsoft teams internet test, voip speed test, internet speed for video conferencing, online video call quality test" />
+  <title>Speedoodle 🚀 | Video Call Internet Speed Test (Zoom, Google Meet, Teams)</title>
+  <meta name="description" content="Check your internet speed for video calls. Speedoodle measures ping, stability, download and upload speeds for Zoom, Google Meet, and Microsoft Teams." />
+  <meta name="keywords" content="video call speed test, Zoom speed test, Google Meet speed test, Teams internet test, ping test, jitter test, bandwidth test, internet stability test" />
+  <meta name="author" content="Speedoodle Team" />
   <link rel="canonical" href="https://www.speedoodle.com/" />
-  <meta property="og:title" content="Video Call Speed Test 🚀 | Speedoodle" />
-  <meta property="og:description" content="Is your connection ready for video calls? Test your internet for Zoom, Google Meet, and Teams with Speedoodle." />
+  <meta property="og:title" content="Speedoodle 🚀 | Video Call Internet Speed Test" />
+  <meta property="og:description" content="Test your internet quality for Zoom, Meet, and Teams. Measure ping, stability, and speeds in seconds." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.speedoodle.com/" />
-  <meta property="og:image" content="https://www.speedoodle.com/thumbnail.png" />
+  <meta property="og:image" content="https://www.speedoodle.com/preview.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Video Call Speed Test 🚀 | Speedoodle" />
-  <meta name="twitter:description" content="Is your connection ready for video calls? Test your internet for Zoom, Google Meet, and Teams with Speedoodle." />
-  <meta name="twitter:image" content="https://www.speedoodle.com/thumbnail.png" />
-  <link rel="preload" as="image" href="https://www.speedoodle.com/thumbnail.png" />
+  <meta name="twitter:title" content="Speedoodle 🚀 | Video Call Internet Speed Test" />
+  <meta name="twitter:description" content="Check your internet connection for Zoom, Meet, and Teams." />
+  <meta name="twitter:image" content="https://www.speedoodle.com/preview.png" />
+  <link rel="preload" as="image" href="https://www.speedoodle.com/preview.png" />
   <style>
     :root{ --bg:#0b1020; --panel:#171e2b; --border:#2b3546; --muted:#9aa6bd; --text:#e6edf6; --teal:#21d0c3; --good:#21d6c7; --warn:#f2c94c; --bad:#ff5470; }
     *{box-sizing:border-box}
@@ -59,18 +60,30 @@
     .meter .fill{height:100%;width:0%;background:linear-gradient(90deg,#21d6c7,#19a396);transition:width .35s ease}
     .badge-mini{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-size:12px;border:1px solid var(--border);color:#cfe6ff;background:#0f1626}
     .status-ok{color:#b8f3ea}.status-warn{color:#f2c94c}.status-bad{color:#ff7b91}
-    @media(max-width:860px){ .tiles{grid-template-columns:repeat(2,1fr)} .grid-4{grid-template-columns:1fr} }
+    .seo-section{margin:40px 0 20px;padding:32px;border-radius:12px;background:var(--panel);border:1px solid var(--border);text-align:left;line-height:1.7;color:var(--muted)}
+    .seo-section h2{margin:0 0 16px;color:var(--text);font-size:20px}
+    .seo-section p{margin:0 0 16px;font-size:15px}
+    .seo-section ul{margin:0 0 16px;padding-left:20px;list-style:disc}
+    .seo-section li{margin-bottom:8px;font-size:15px}
+    .seo-section strong{color:var(--text)}
+    @media(max-width:860px){
+      .tiles{grid-template-columns:repeat(2,1fr)}
+      .grid-4{grid-template-columns:1fr}
+      .seo-section{padding:24px;margin:32px 0 16px}
+    }
   </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebSite",
+    "@type": "WebApplication",
     "name": "Speedoodle",
+    "description": "Video Call Internet Speed Test – Zoom, Google Meet, Teams",
     "url": "https://www.speedoodle.com",
-    "description": "Video call speed test tailored for Zoom, Google Meet, and Teams.",
-    "potentialAction": {
-      "@type": "Action",
-      "name": "Run Video Call Speed Test"
+    "applicationCategory": "Utility",
+    "operatingSystem": "All",
+    "creator": {
+      "@type": "Organization",
+      "name": "Speedoodle"
     }
   }
   </script>
@@ -81,7 +94,8 @@
     "name": "Speedoodle",
     "applicationCategory": "WebApplication",
     "operatingSystem": "Any",
-    "offers": { "@type": "Offer", "price": "0" }
+    "offers": { "@type": "Offer", "price": "0" },
+    "description": "Check your internet quality for video calls on Zoom, Google Meet, and Microsoft Teams."
   }
   </script>
 </head>
@@ -89,8 +103,8 @@
   <div class="container">
     <header>
       <p class="brand">Speedoodle <span style="color:var(--teal)">🚀</span></p>
-      <h1>Video Call Speed Test</h1>
-      <p class="tagline">Check if your internet is ready for Zoom, Google Meet, or Teams calls.</p>
+      <h1>Video Call Internet Speed Test – Zoom, Google Meet & Microsoft Teams</h1>
+      <p class="tagline">Speedoodle helps you check your internet quality for Zoom, Google Meet, and Microsoft Teams video calls.</p>
     </header>
 
     <section class="tiles">
@@ -157,6 +171,26 @@
     <section class="card" style="margin:18px 0 8px">
       <h3 style="margin:0 0 10px;color:var(--muted);font-size:14px">IP Address & ISP</h3>
       <div class="ip"><div><strong id="ipVal">—</strong></div><div id="ispVal">—</div></div>
+    </section>
+
+    <section class="seo-section">
+      <p>
+        Speedoodle 🚀 helps you check your internet quality for video calls. The test measures
+        <strong>download speed</strong>, <strong>upload speed</strong>,
+        <strong>ping</strong>, and <strong>connection stability</strong> so you can keep Zoom, Google Meet,
+        or Microsoft Teams meetings running smoothly.
+      </p>
+      <h2>Why Choose Speedoodle?</h2>
+      <ul>
+        <li>Fast and accurate internet speed testing</li>
+        <li>Optimized for group and business video meetings</li>
+        <li>Live metrics for ping, jitter, and bandwidth</li>
+        <li>Works seamlessly on mobile and desktop</li>
+      </ul>
+      <p>
+        No installations, no sign-ups&mdash;simply click "Start Test" and within seconds you'll know if your
+        connection is ready for high-quality video calls.
+      </p>
     </section>
 
     <footer style="text-align:center;color:var(--muted);font-size:12px;margin-top:8px">© 2025 Speedoodle. Results may vary by server, browser, and network.</footer>
