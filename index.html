@@ -3,8 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Speedoodle — Internet Speed Test + Call Quality Score</title>
-  <meta name="description" content="Download/Upload/Ping/Jitter + live graph + 0–100 call quality score." />
+  <title>Video Call Speed Test 🚀 | Speedoodle</title>
+  <meta name="description" content="Check if your internet is ready for Zoom, Google Meet, or Teams calls. Speedoodle 🚀 runs a quick speed test tailored for video conferencing stability." />
+  <meta name="keywords" content="video call speed test, zoom speed test, google meet speed test, microsoft teams internet test, voip speed test, internet speed for video conferencing, online video call quality test" />
+  <link rel="canonical" href="https://www.speedoodle.com/" />
+  <meta property="og:title" content="Video Call Speed Test 🚀 | Speedoodle" />
+  <meta property="og:description" content="Is your connection ready for video calls? Test your internet for Zoom, Google Meet, and Teams with Speedoodle." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.speedoodle.com/" />
+  <meta property="og:image" content="https://www.speedoodle.com/thumbnail.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Video Call Speed Test 🚀 | Speedoodle" />
+  <meta name="twitter:description" content="Is your connection ready for video calls? Test your internet for Zoom, Google Meet, and Teams with Speedoodle." />
+  <meta name="twitter:image" content="https://www.speedoodle.com/thumbnail.png" />
+  <link rel="preload" as="image" href="https://www.speedoodle.com/thumbnail.png" />
   <style>
     :root{ --bg:#0b1020; --panel:#171e2b; --border:#2b3546; --muted:#9aa6bd; --text:#e6edf6; --teal:#21d0c3; --good:#21d6c7; --warn:#f2c94c; --bad:#ff5470; }
     *{box-sizing:border-box}
@@ -13,7 +25,8 @@
     .container{max-width:1100px;margin:0 auto;padding:24px}
     header{text-align:center;margin-top:8px}
     header h1{font-weight:800;letter-spacing:.2px;margin:0;font-size:28px}
-    header p{margin:.5rem 0 0;color:var(--muted)}
+    header .brand{margin:0;font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted)}
+    header .tagline{margin:.5rem 0 0;color:var(--muted)}
 
     .tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin:28px 0}
     .tile{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center}
@@ -48,12 +61,36 @@
     .status-ok{color:#b8f3ea}.status-warn{color:#f2c94c}.status-bad{color:#ff7b91}
     @media(max-width:860px){ .tiles{grid-template-columns:repeat(2,1fr)} .grid-4{grid-template-columns:1fr} }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Speedoodle",
+    "url": "https://www.speedoodle.com",
+    "description": "Video call speed test tailored for Zoom, Google Meet, and Teams.",
+    "potentialAction": {
+      "@type": "Action",
+      "name": "Run Video Call Speed Test"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Speedoodle",
+    "applicationCategory": "WebApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0" }
+  }
+  </script>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>Speedoodle <span style="color:var(--teal)">🚀</span></h1>
-      <p>Internet Speed Test + Call Quality Score</p>
+      <p class="brand">Speedoodle <span style="color:var(--teal)">🚀</span></p>
+      <h1>Video Call Speed Test</h1>
+      <p class="tagline">Check if your internet is ready for Zoom, Google Meet, or Teams calls.</p>
     </header>
 
     <section class="tiles">

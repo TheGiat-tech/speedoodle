@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://speedoodle.vercel.app/</loc></url>
-  <url><loc>https://speedoodle.vercel.app/privacy.html</loc></url>
-  <url><loc>https://speedoodle.vercel.app/terms.html</loc></url>
-  <url><loc>https://speedoodle.vercel.app/about.html</loc></url>
-  <url><loc>https://speedoodle.vercel.app/contact.html</loc></url>
+  <url><loc>https://www.speedoodle.com/</loc></url>
+  <url><loc>https://www.speedoodle.com/blog/</loc></url>
+  <url><loc>https://www.speedoodle.com/faq/</loc></url>
+  <url><loc>https://www.speedoodle.com/privacy.html</loc></url>
+  <url><loc>https://www.speedoodle.com/terms.html</loc></url>
+  <url><loc>https://www.speedoodle.com/about.html</loc></url>
+  <url><loc>https://www.speedoodle.com/contact.html</loc></url>
 </urlset>
