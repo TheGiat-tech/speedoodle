@@ -131,9 +131,45 @@
   if (window.__speedoodle && window.__speedoodle.initialized) return;
   window.__speedoodle = { initialized: true };
   const $ = (id)=>document.getElementById(id);
-  const fmt = (n,d=2)=> (Number.isFinite(+n)?(+n).toFixed(d):'—');
   const clamp = (v,a,b)=> Math.min(b,Math.max(a,v));
   const bitsToMbps = (bits)=> bits/1e6;
+
+  // slot-machine style counter animation
+  function animateCounter(el, target, duration=1000){
+    if(!el) return;
+    let finalValue = Number(target);
+    if(!Number.isFinite(finalValue)) finalValue = 0;
+    const prev = el.dataset && el.dataset.final;
+    let start = prev!=null ? parseFloat(prev) : parseFloat(el.textContent);
+    if(!Number.isFinite(start)) start = 0;
+    const t0 = performance.now();
+    el.dataset.final = String(finalValue);
+    (function raf(now){
+      const progress = Math.min(1,(now-t0)/duration);
+      const value = start + (finalValue-start)*progress;
+      el.textContent = value.toFixed(2);
+      if(progress<1) requestAnimationFrame(raf);
+    })(t0);
+  }
+
+  function resetMetric(id){
+    const el=$(id);
+    if(!el) return;
+    if(el.dataset) delete el.dataset.final;
+    el.textContent='—';
+  }
+
+  function metricValue(id, fallback){
+    const el=$(id);
+    if(!el) return fallback;
+    const stored = el.dataset && el.dataset.final;
+    if(stored!=null){
+      const parsed = parseFloat(stored);
+      if(Number.isFinite(parsed)) return parsed;
+    }
+    const parsed = parseFloat(el.textContent);
+    return Number.isFinite(parsed)?parsed:fallback;
+  }
 
   if ($('browserVal')) $('browserVal').textContent = navigator.userAgent || '—';
   if ($('osVal')) $('osVal').textContent = navigator.platform || '—';
@@ -186,7 +222,7 @@
   function testDownload(ms=3500, parallel=3){ let loaded=0; const start=performance.now(), end=start+ms; let dlEMA=null; function run(){ return new Promise((resolve)=>{ (function loop(){ if(performance.now()>=end){ resolve(); return; } const size=4*1024*1024; fetchWithTimeout(CF_DOWN+size,{cache:'no-store',mode:'cors'},2000).then(r=>r.arrayBuffer()).then(b=>{ loaded+=(b&&b.byteLength?b.byteLength:0)*8; }).catch(()=>{}).finally(()=>{ const elapsed=(performance.now()-start)/1000; const mbps=bitsToMbps(loaded/Math.max(elapsed,0.001)); dlEMA = dlEMA==null? mbps : (dlEMA*0.8 + mbps*0.2); line.push(dlEMA); loop(); }); })(); }); } const ps=[]; for(let k=0;k<parallel;k++) ps.push(run()); return Promise.all(ps).then(()=>({downMbps: bitsToMbps(loaded/(ms/1000))})); }
   function testUpload(ms=2500, parallel=2){ const payload=new Uint8Array(64*1024); safeFillRandom(payload); let sent=0; const start=performance.now(), end=start+ms; let usingBeacon=false; setTimeout(()=>{ if(sent===0 && 'sendBeacon' in navigator){ usingBeacon=true; const n=$('uplNote'); if(n) n.textContent='using beacon fallback'; } },1000); function run(){ return new Promise((resolve)=>{ (function loop(){ if(performance.now()>=end){ resolve(); return; } if(usingBeacon && navigator.sendBeacon){ try{ if(navigator.sendBeacon(CF_UP,payload)) sent+=payload.byteLength*8; }catch(_){} setTimeout(loop,0); return; } fetchWithTimeout(CF_UP,{method:'POST',mode:'cors',cache:'no-store',headers:{'Content-Type':'application/octet-stream'},body:payload},1500).then(()=>{ sent+=payload.byteLength*8; }).catch(()=>{}).finally(()=>loop()); })(); }); } const ps=[]; for(let k=0;k<parallel;k++) ps.push(run()); return Promise.all(ps).then(()=>({upMbps: bitsToMbps(sent/(ms/1000))})); }
 
-  function runDemo(){ const ping=parseFloat(($('pingVal')||{}).textContent)||140; const jitter=parseFloat(($('jitterVal')||{}).textContent)||40; line.clear(); let cur=5, steps=140, i=0; (function tick(){ const target=i<90?Math.min(180,cur+Math.random()*6):Math.max(40,cur-Math.random()*3); cur=Math.max(5,Math.min(200,target)); line.push(cur); setScoreTarget(scoreConnection({downMbps:cur,upMbps:0.8,pingMs:ping,jitterMs:jitter})); i++; if(i<steps){ setTimeout(tick,35); return; } const dl=Math.max(30,Math.min(200,cur+(Math.random()*10-5))); const ul=0.8+Math.random()*1.2; $('dlVal').textContent=fmt(dl,2); $('ulVal').textContent=fmt(ul,2); const all={downMbps:dl,upMbps:ul,pingMs:ping,jitterMs:jitter}; setScoreTarget(scoreConnection(all)); $('scoreBadge').textContent=qualityLabel(all); $('verdict').textContent=verdictText(all)+' (demo)'; })(); }
+  function runDemo(){ const ping=metricValue('pingVal',140); const jitter=metricValue('jitterVal',40); line.clear(); let cur=5, steps=140, i=0; (function tick(){ const target=i<90?Math.min(180,cur+Math.random()*6):Math.max(40,cur-Math.random()*3); cur=Math.max(5,Math.min(200,target)); line.push(cur); setScoreTarget(scoreConnection({downMbps:cur,upMbps:0.8,pingMs:ping,jitterMs:jitter})); i++; if(i<steps){ setTimeout(tick,35); return; } const dl=Math.max(30,Math.min(200,cur+(Math.random()*10-5))); const ul=0.8+Math.random()*1.2; animateCounter($('dlVal'), dl, 900); animateCounter($('ulVal'), ul, 900); const all={downMbps:dl,upMbps:ul,pingMs:ping,jitterMs:jitter}; setScoreTarget(scoreConnection(all)); $('scoreBadge').textContent=qualityLabel(all); $('verdict').textContent=verdictText(all)+' (demo)'; })(); }
 
   // ===== CPU & memory =====
   function setBadge(id,pct){ const el=$(id); if(!el) return; el.classList.remove('status-ok','status-warn','status-bad'); if(pct<60){ el.textContent='OK'; el.classList.add('status-ok'); } else if(pct<85){ el.textContent='High'; el.classList.add('status-warn'); } else { el.textContent='Very High'; el.classList.add('status-bad'); } }
@@ -205,18 +241,49 @@
   $('startBtn').onclick=function(){
     $('busy').classList.add('show');
     scorePos=0; $('scoreCenter').textContent='0'; drawGauge(0);
-    $('dlVal').textContent='—'; $('ulVal').textContent='—'; $('verdict').textContent='Testing...';
+    resetMetric('dlVal'); resetMetric('ulVal'); resetMetric('pingVal'); resetMetric('jitterVal');
+    $('verdict').textContent='Testing...';
     const note=$('uplNote'); if(note) note.textContent='';
     $('scoreBadge').textContent='—'; line.clear();
+
+    let pingMs=Infinity, jitterMs=Infinity, lastDown=0, lastUp=0;
 
     const reasons=[]; const add=(r)=>{ if(reasons.indexOf(r)===-1) reasons.push(r); };
     const setVerdict=()=>{ $('verdict').textContent = reasons.length? ('Issues detected:\n• '+reasons.join('\n• ')) : 'Looks great for video calls.'; };
 
     const watchdog=setTimeout(function(){ if($('busy').classList.contains('show')){ add('Network blocked or timed out'); setVerdict(); runDemo(); $('busy').classList.remove('show'); } },15000);
 
-    testPing().then(function(p){ if(!isFinite(p.pingMs)) add('Ping failed'); $('pingVal').textContent=fmt(p.pingMs,0); $('jitterVal').textContent=fmt(p.jitterMs,0); return testDownload(); })
-    .then(function(dl){ if(!dl || !isFinite(dl.downMbps) || dl.downMbps<=0) add('Download blocked/timeout'); $('dlVal').textContent=fmt((dl&&dl.downMbps)||0,2); const tmp={downMbps:(dl&&dl.downMbps)||0,upMbps:0,pingMs:parseFloat($('pingVal').textContent)||Infinity,jitterMs:parseFloat($('jitterVal').textContent)||Infinity}; setScoreTarget(scoreConnection(tmp)); return testUpload(); })
-    .then(function(ul){ const up=(ul&&ul.upMbps)||0; $('ulVal').textContent=fmt(up,2); if(up<=0.01) add('Upload blocked/timeout'); const all={downMbps:parseFloat($('dlVal').textContent)||0, upMbps:up, pingMs:parseFloat($('pingVal').textContent)||Infinity, jitterMs:parseFloat($('jitterVal').textContent)||Infinity}; setScoreTarget(scoreConnection(all)); $('scoreBadge').textContent=qualityLabel(all); setVerdict(); })
+    testPing().then(function(p){
+      const hasPing=p&&Number.isFinite(p.pingMs);
+      const hasJitter=p&&Number.isFinite(p.jitterMs);
+      if(!hasPing) add('Ping failed');
+      animateCounter($('pingVal'), hasPing?p.pingMs:0, 700);
+      animateCounter($('jitterVal'), hasJitter?p.jitterMs:0, 700);
+      if(hasPing) pingMs=p.pingMs; else pingMs=Infinity;
+      if(hasJitter) jitterMs=p.jitterMs; else jitterMs=Infinity;
+      return testDownload();
+    })
+    .then(function(dl){
+      const hasDown=dl && Number.isFinite(dl.downMbps);
+      const downVal=hasDown?dl.downMbps:0;
+      if(!hasDown || downVal<=0) add('Download blocked/timeout');
+      animateCounter($('dlVal'), downVal, 900);
+      lastDown=downVal;
+      const tmp={downMbps:lastDown,upMbps:0,pingMs:pingMs,jitterMs:jitterMs};
+      setScoreTarget(scoreConnection(tmp));
+      return testUpload();
+    })
+    .then(function(ul){
+      const hasUp=ul && Number.isFinite(ul.upMbps);
+      const upVal=hasUp?ul.upMbps:0;
+      animateCounter($('ulVal'), upVal, 900);
+      lastUp=upVal;
+      if(upVal<=0.01) add('Upload blocked/timeout');
+      const all={downMbps:lastDown, upMbps:lastUp, pingMs:pingMs, jitterMs:jitterMs};
+      setScoreTarget(scoreConnection(all));
+      $('scoreBadge').textContent=qualityLabel(all);
+      setVerdict();
+    })
     .catch(function(){ add('Network blocked or timed out'); setVerdict(); runDemo(); })
     .finally(function(){ clearTimeout(watchdog); $('busy').classList.remove('show'); });
   };
