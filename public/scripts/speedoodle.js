@@ -1,131 +1,3 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Speedoodle — Internet Speed Test + Call Quality Score</title>
-  <meta name="description" content="Download/Upload/Ping/Jitter + live graph + 0–100 call quality score." />
-  <style>
-    :root{ --bg:#0b1020; --panel:#171e2b; --border:#2b3546; --muted:#9aa6bd; --text:#e6edf6; --teal:#21d0c3; --good:#21d6c7; --warn:#f2c94c; --bad:#ff5470; }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;background:var(--bg);color:var(--text)}
-    .container{max-width:1100px;margin:0 auto;padding:24px}
-    header{text-align:center;margin-top:8px}
-    header h1{font-weight:800;letter-spacing:.2px;margin:0;font-size:28px}
-    header p{margin:.5rem 0 0;color:var(--muted)}
-
-    .tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin:28px 0}
-    .tile{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center}
-    .tile h3{margin:0 0 6px;font-size:13px;color:var(--muted);font-weight:600}
-    .tile .value{font-size:44px;line-height:1;font-weight:800}
-    .tile .unit{display:block;margin-top:4px;font-size:12px;color:var(--muted)}
-
-    .go-wrap{display:flex;align-items:center;justify-content:center;gap:16px;margin:10px 0 22px}
-    .go{width:140px;height:140px;border-radius:50%;border:none;cursor:pointer;background:radial-gradient(ellipse at 50% 40%, #23d9cb 0%, #19a396 70%, #0e5f58 100%);color:#00100f;font-weight:800;font-size:32px;letter-spacing:.5px;box-shadow:0 0 0 6px rgba(33,208,195,.15),0 8px 28px rgba(0,0,0,.45);transition:transform .2s ease}
-    .go:active{transform:scale(.95)}
-    .busy{display:none;color:var(--muted);font-size:14px;margin-top:10px;text-align:center}
-    .busy.show{display:block}
-
-    .card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:18px}
-    .grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:18px}
-
-    .chart{position:relative;height:260px;background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0));border-radius:12px;padding:16px;border:1px solid var(--border)}
-    .chart canvas{width:100%;height:100%}
-    #speedTip{position:absolute;pointer-events:none;top:0;left:0;transform:translate(-50%,-120%);background:#0f1626;border:1px solid var(--border);padding:6px 8px;border-radius:8px;color:#cfe6ff;font-size:12px;display:none;white-space:nowrap;box-shadow:0 6px 16px rgba(0,0,0,.35)}
-
-    .gauge{position:relative;height:200px}
-    .gauge canvas{width:100%;height:100%}
-    .score{position:absolute;inset:0;display:grid;place-items:center;font-size:38px;font-weight:800}
-    .badge{display:inline-block;margin-top:10px;padding:6px 10px;border-radius:999px;background:#243044;color:#c4d0e0;font-size:12px;font-weight:600}
-
-    .ip{display:grid;grid-template-columns:1fr;gap:8px;color:var(--muted)}
-    .ip strong{color:var(--text)}
-
-    .meter{height:10px;background:#0f1626;border:1px solid var(--border);border-radius:999px;overflow:hidden;margin-top:6px}
-    .meter .fill{height:100%;width:0%;background:linear-gradient(90deg,#21d6c7,#19a396);transition:width .35s ease}
-    .badge-mini{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-size:12px;border:1px solid var(--border);color:#cfe6ff;background:#0f1626}
-    .status-ok{color:#b8f3ea}.status-warn{color:#f2c94c}.status-bad{color:#ff7b91}
-    @media(max-width:860px){ .tiles{grid-template-columns:repeat(2,1fr)} .grid-4{grid-template-columns:1fr} }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <header>
-      <h1>Speedoodle <span style="color:var(--teal)">🚀</span></h1>
-      <p>Internet Speed Test + Call Quality Score</p>
-    </header>
-
-    <section class="tiles">
-      <div class="tile"><h3>Download</h3><div id="dlVal" class="value">—</div><span class="unit">Mbps</span></div>
-      <div class="tile"><h3>Upload</h3><div id="ulVal" class="value">—</div><span class="unit">Mbps</span><div class="unit" id="uplNote"></div></div>
-      <div class="tile"><h3>Ping</h3><div id="pingVal" class="value">—</div><span class="unit">ms</span></div>
-      <div class="tile"><h3>Jitter</h3><div id="jitterVal" class="value">—</div><span class="unit">ms</span></div>
-    </section>
-
-    <div class="go-wrap">
-      <button id="startBtn" class="go" type="button" aria-label="Start speed test">GO</button>
-    </div>
-    <div id="busy" class="busy" role="status">Testing...</div>
-
-    <section class="card" style="margin-top:14px">
-      <h3 style="margin:0 0 10px;color:var(--muted);font-size:14px">Live Speed Graph</h3>
-      <div class="chart"><canvas id="speedCanvas"></canvas><div id="speedTip"></div></div>
-    </section>
-
-    <section class="grid-4">
-      <div class="card">
-        <h3 style="margin:0 0 10px;color:var(--muted);font-size:14px">Call Quality Score</h3>
-        <div class="gauge"><canvas id="scoreCanvas"></canvas><div id="scoreCenter" class="score">0</div></div>
-        <div id="scoreBadge" class="badge">—</div>
-      </div>
-      <div class="card">
-        <h3 style="margin:0 0 10px;color:var(--muted);font-size:14px">Quality Recommendations</h3>
-        <div style="color:var(--muted);font-size:14px;line-height:1.7">
-          <div><strong style="color:var(--text)">HD 720p</strong>: ≥ 1.2 Mbps up/down</div>
-          <div><strong style="color:var(--text)">Full HD 1080p</strong>: ≥ 3 Mbps down, ≥ 2.5 Mbps up</div>
-          <div><strong style="color:var(--text)">Large Group</strong>: ≥ 5–10 Mbps up/down</div>
-        </div>
-      </div>
-      <div class="card">
-        <h3 style="margin:0 0 10px;color:var(--muted);font-size:14px">Tips for Better Call Quality</h3>
-        <ul class="tips" style="margin:0;padding-left:18px;color:var(--muted);font-size:14px;line-height:1.6">
-          <li><strong>Use wired</strong> Ethernet instead of Wi-Fi if possible.</li>
-          <li>Close <strong>background downloads</strong> or heavy streaming apps.</li>
-          <li>Make sure your <strong>router firmware</strong> is updated.</li>
-          <li>For best results, connect from a <strong>quiet network environment</strong>.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3 style="margin:0 0 10px;color:var(--muted);font-size:14px">System Performance</h3>
-        <ul class="tips" style="margin:0;padding-left:18px;color:var(--muted);font-size:14px;line-height:1.6">
-          <li>CPU Usage: <strong id="cpuVal">—</strong> <span id="cpuBadge" class="badge-mini">Idle</span>
-            <div class="meter"><div id="cpuBar" class="fill"></div></div>
-          </li>
-          <li>Memory Usage: <strong id="memVal">—</strong> <span id="memBadge" class="badge-mini">—</span>
-            <div class="meter"><div id="memBar" class="fill"></div></div>
-          </li>
-          <li>Browser: <strong id="browserVal">—</strong></li>
-          <li>OS: <strong id="osVal">—</strong></li>
-        </ul>
-        <button id="metricsCsv" class="badge-mini" style="margin-top:10px">Download metrics CSV</button>
-      </div>
-    </section>
-
-    <section class="card" style="margin:18px 0 8px">
-      <h3 style="margin:0 0 10px;color:var(--muted);font-size:14px">Connection Status</h3>
-      <div id="verdict" style="color:#c4d0e0;font-size:14px">—</div>
-    </section>
-
-    <section class="card" style="margin:18px 0 8px">
-      <h3 style="margin:0 0 10px;color:var(--muted);font-size:14px">IP Address & ISP</h3>
-      <div class="ip"><div><strong id="ipVal">—</strong></div><div id="ispVal">—</div></div>
-    </section>
-
-    <footer style="text-align:center;color:var(--muted);font-size:12px;margin-top:8px">© 2025 Speedoodle. Results may vary by server, browser, and network.</footer>
-  </div>
-
-  <script>
 'use strict';
 (function(){
   if (window.__speedoodle && window.__speedoodle.initialized) return;
@@ -228,9 +100,7 @@
     console.assert(typeof line !== 'undefined','line instance');
   }catch(_){ }
 })();
-  </script>
 
-  <script>
 // Mobile-friendly IP/ISP fallback + iOS memory label
 (function(){
   const $=id=>document.getElementById(id);
@@ -241,13 +111,3 @@
   const needIsp = $('ispVal') && (!$('ispVal').textContent || $('ispVal').textContent==='—');
   if(needIp || needIsp){ (async function(){ let ip='—', isp='—'; const ipSources=[ ()=>tryJson('https://api64.ipify.org?format=json').then(j=>j.ip), ()=>tryJson('https://api.ipify.org?format=json').then(j=>j.ip), ()=>tryJson('https://ipwho.is/').then(j=>j.ip), ()=>tryJson('https://ipapi.co/json/').then(j=>j.ip) ]; for (let f of ipSources){ try{ ip=await f(); if(ip) break; }catch(e){} } try{ let d=await tryJson('https://ipapi.co/json/'); isp=(d.org||d.org_name||'')+(d.country_name? ' - '+d.country_name:''); } catch(_){ try{ let d=await tryJson('https://ipwho.is/'); isp=((d.connection&&d.connection.isp)?d.connection.isp:(d.org||''))+(d.country? ' - '+d.country:''); }catch(__){} } if($('ipVal')) $('ipVal').textContent=ip||'—'; if($('ispVal')) $('ispVal').textContent=isp||'—'; })(); }
 })();
-  </script>
-
-  <script defer src="https://vercel.com/analytics/script.js"></script>
-  <script>
-    window.va = window.va || function () {
-      (window.vaq = window.vaq || []).push(arguments);
-    };
-  </script>
-</body>
-</html>
