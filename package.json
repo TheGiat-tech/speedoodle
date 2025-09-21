@@ -1,0 +1,16 @@
+{
+  "name": "speedoodle",
+  "version": "1.0.0",
+  "description": "אתר קטן בסגנון Fast.com לבדיקת מהירות (הורדה, העלאה ופינג) מול Cloudflare.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@vercel/analytics": "latest"
+  }
+}
