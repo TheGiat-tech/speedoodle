@@ -1,19 +1,17 @@
+import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
-import { Inter } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
 
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata = {
-  title: "Speedoodle 🚀 — Internet Speed Test",
-  description: "Check your internet speed instantly with Speedoodle 🚀",
+export const metadata: Metadata = {
+  title: "Video Call Speed Test  | Speedoodle",
+  description: "Check internet quality for Zoom, Google Meet, and Microsoft Teams video calls.",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
+        {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-LD6QWT7SJ0"
           strategy="afterInteractive"
@@ -27,10 +25,7 @@ export default function RootLayout({ children }) {
           `}
         </Script>
       </head>
-      <body className={inter.className}>
-        {children}
-        <Analytics />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
