@@ -19,6 +19,8 @@ footer{font-size:.9rem}
 .stat-card .val{font-size:28px;font-weight:800}
 .testing .big-num,.testing .stat-card .val{animation:pulse 1.6s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.9;transform:scale(.992)}}
+.ad-wrapper{margin:24px 0;display:flex;justify-content:center}
+.ad-wrapper .adsbygoogle{width:100%}
 .adsbygoogle,#ad-slot-1{position:relative;z-index:1}
 #runTest{position:relative;z-index:2}
 /* === Animated Gauge + CountUp (safe append) === */
