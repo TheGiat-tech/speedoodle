@@ -74,6 +74,13 @@
     .seo-section ul{margin:0 0 16px;padding-left:20px;list-style:disc}
     .seo-section li{margin-bottom:8px;font-size:15px}
     .seo-section strong{color:var(--text)}
+    .seo-section table{width:100%;border-collapse:collapse;margin:16px 0}
+    .seo-section th,.seo-section td{text-align:left;padding:10px;border-bottom:1px solid var(--border);font-size:15px}
+    .seo-section thead th{background:#111b2e;color:var(--text)}
+    .seo-section details{margin-bottom:12px;border:1px solid var(--border);border-radius:10px;padding:12px;background:#101829}
+    .seo-section details:last-child{margin-bottom:0}
+    .seo-section summary{cursor:pointer;color:var(--text);font-size:16px}
+    .seo-section summary::-webkit-details-marker{display:none}
     @media(max-width:860px){
       .tiles{grid-template-columns:repeat(2,1fr)}
       .grid-4{grid-template-columns:1fr}
@@ -112,7 +119,12 @@
     "mainEntity":[
       {"@type":"Question","name":"What speeds do I need for HD video calls?","acceptedAnswer":{"@type":"Answer","text":"For stable HD calls, aim for at least 5 Mbps download, 3 Mbps upload, latency < 50 ms, and jitter < 30 ms."}},
       {"@type":"Question","name":"What is jitter and why does it matter?","acceptedAnswer":{"@type":"Answer","text":"Jitter is variation in packet arrival times. High jitter causes choppy audio and frozen video. Lower is better for Zoom/Meet/Teams."}},
-      {"@type":"Question","name":"How can I quickly improve video call quality?","acceptedAnswer":{"@type":"Answer","text":"Use wired Ethernet or 5 GHz Wi-Fi, close heavy downloads, move closer to the router, and avoid VPNs during calls."}}
+      {"@type":"Question","name":"How can I quickly improve video call quality?","acceptedAnswer":{"@type":"Answer","text":"Use wired Ethernet or 5 GHz Wi-Fi, close heavy downloads, move closer to the router, and avoid VPNs during calls."}},
+      {"@type":"Question","name":"Why is my internet slower than expected?","acceptedAnswer":{"@type":"Answer","text":"Wi-Fi interference, peak-time congestion, outdated hardware, or plan limits can slow things down. Try Ethernet, move closer to the router, and restart your modem/router."}},
+      {"@type":"Question","name":"What is a good ping for gaming?","acceptedAnswer":{"@type":"Answer","text":"Under 50 ms is good; under 20 ms is excellent. Lower ping keeps gameplay responsive."}},
+      {"@type":"Question","name":"Why does upload speed matter?","acceptedAnswer":{"@type":"Answer","text":"Uploads power video calls, live streaming, cloud backups, and file sharing. Low upload speeds can cause choppy calls."}},
+      {"@type":"Question","name":"How often should I test my internet speed?","acceptedAnswer":{"@type":"Answer","text":"Test weekly and whenever you feel buffering or lag. Try multiple times of day to spot congestion patterns."}},
+      {"@type":"Question","name":"Does the Speedoodle test share data with my ISP?","acceptedAnswer":{"@type":"Answer","text":"No. The test runs in your browser and results are not shared with your provider."}}
     ]
   }
   </script>
@@ -334,6 +346,117 @@
         <p>Use the CSV export and send a link to the <a href="/blog/lowering-latency-hybrid-teams.html">hybrid teams latency
           article</a>. Together they give IT managers a clear picture of which offices or remote employees need extra support.</p>
       </details>
+    </section>
+
+    <section class="seo-section" id="why">
+      <h2>Why Check Your Internet Speed?</h2>
+      <p>
+        Your internet speed directly influences how smoothly you can stream, game, share files, and join video calls.
+        Running a quick Speedoodle test verifies your provider’s performance, helps diagnose Wi-Fi hiccups, and shows
+        whether your connection is stable enough for Zoom, Teams, or Meet without disruptive freezes.
+      </p>
+    </section>
+
+    <section class="seo-section" id="recommendations">
+      <h2>Recommended Speeds by Activity</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Activity</th>
+            <th>Minimum Speed</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Web Browsing &amp; Email</td>
+            <td>1–5 Mbps</td>
+            <td>Fine for everyday tasks</td>
+          </tr>
+          <tr>
+            <td>HD Streaming (Netflix/YouTube)</td>
+            <td>5–10 Mbps</td>
+            <td>Prefer wired for consistency</td>
+          </tr>
+          <tr>
+            <td>4K Streaming</td>
+            <td>25 Mbps</td>
+            <td>Stable Wi-Fi or Ethernet</td>
+          </tr>
+          <tr>
+            <td>Online Gaming</td>
+            <td>10–20 Mbps</td>
+            <td>Low ping &amp; low jitter matter most</td>
+          </tr>
+          <tr>
+            <td>Video Calls (Zoom/Teams)</td>
+            <td>3–6 Mbps</td>
+            <td>Uploads influence call quality</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="seo-section" id="tips">
+      <h2>Tips to Improve Your Speed</h2>
+      <ul>
+        <li>Reboot your modem and router once a week to refresh connections.</li>
+        <li>Place the router centrally and elevated, away from thick walls and metal appliances.</li>
+        <li>Use Ethernet for gaming, streaming, or stationary desktops that require low latency.</li>
+        <li>Keep router firmware and device Wi-Fi drivers updated to unlock performance fixes.</li>
+        <li>Limit background downloads, large cloud sync jobs, and automatic updates during calls.</li>
+      </ul>
+    </section>
+
+    <section class="seo-section" id="faq">
+      <h2>Frequently Asked Questions</h2>
+      <details>
+        <summary><strong>Why is my internet slower than expected?</strong></summary>
+        <p>Common culprits include Wi-Fi interference, peak-time congestion, outdated hardware, or plan limits. Try Ethernet, move closer to the router, and restart your modem/router.</p>
+      </details>
+      <details>
+        <summary><strong>What is a good ping for gaming?</strong></summary>
+        <p>Under 50 ms is good; under 20 ms is excellent. Lower ping keeps gameplay responsive.</p>
+      </details>
+      <details>
+        <summary><strong>Why does upload speed matter?</strong></summary>
+        <p>Uploads power video calls, live streaming, cloud backups, and file sharing. Low upload speeds can cause choppy calls or stalled transfers.</p>
+      </details>
+      <details>
+        <summary><strong>How often should I test?</strong></summary>
+        <p>Test weekly and whenever you notice buffering or lag. Run tests at multiple times of day to identify congestion.</p>
+      </details>
+      <details>
+        <summary><strong>Does this test share data with my ISP?</strong></summary>
+        <p>No. Speedoodle runs entirely in your browser, and results are not shared with your provider.</p>
+      </details>
+    </section>
+
+    <section class="seo-section" id="about">
+      <h2>About Speedoodle 🚀</h2>
+      <p>
+        Speedoodle focuses on clear, privacy-aware testing so anyone can understand download, upload, ping, and jitter
+        without jargon. Every feature is designed to make internet diagnostics approachable for families, freelancers,
+        and IT teams alike.
+      </p>
+    </section>
+
+    <section class="seo-section" id="policies">
+      <h2>Privacy Policy</h2>
+      <p>
+        We do not sell personal information. Privacy-friendly analytics may be used to improve the site. Tests run
+        locally in your browser, and results are never shared with your ISP. For questions, contact
+        <a href="mailto:privacy@speedoodle.com">privacy@speedoodle.com</a>.
+      </p>
+
+      <h2>Terms of Use</h2>
+      <p>
+        Use Speedoodle “as-is” without warranties. By running the test, you agree not to misuse or disrupt the
+        service. Results are estimates and can vary by device, provider, and network conditions.
+      </p>
+
+      <h2>Contact</h2>
+      <p>Questions or feedback? <a href="mailto:hello@speedoodle.com">hello@speedoodle.com</a></p>
     </section>
 
     <footer style="text-align:center;color:var(--muted);font-size:12px;margin-top:8px">© 2025 Speedoodle. Results may vary by server, browser, and network.</footer>
