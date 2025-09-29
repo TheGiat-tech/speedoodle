@@ -201,24 +201,139 @@
       <div class="ip"><div><strong id="ipVal">—</strong></div><div id="ispVal">—</div></div>
     </section>
 
-    <section class="seo-section">
+    <section class="seo-section" id="how-it-works">
+      <h2>How the Speedoodle Video Call Speed Test Works</h2>
       <p>
-        Speedoodle 🚀 helps you check your internet quality for video calls. The test measures
-        <strong>download speed</strong>, <strong>upload speed</strong>,
-        <strong>ping</strong>, and <strong>connection stability</strong> so you can keep Zoom, Google Meet,
-        or Microsoft Teams meetings running smoothly.
+        Speedoodle 🚀 was designed as a practical toolkit for anyone who relies on live video. When you press
+        the green <strong>GO</strong> button our test opens multiple secure connections to strategically chosen
+        edge servers. The browser downloads and uploads randomized data blocks that simulate a real Zoom or
+        Google Meet session instead of a simple file transfer. That approach lets us evaluate how your
+        connection behaves under pressure and helps you understand whether home Wi-Fi, an office network, or a
+        temporary coworking space is robust enough for client meetings. Throughout the run we capture precise
+        timestamps that allow the app to calculate throughput, latency and jitter in near real time without ever
+        storing personal details.
       </p>
-      <h2>Why Choose Speedoodle?</h2>
-      <ul>
-        <li>Fast and accurate internet speed testing</li>
-        <li>Optimized for group and business video meetings</li>
-        <li>Live metrics for ping, jitter, and bandwidth</li>
-        <li>Works seamlessly on mobile and desktop</li>
-      </ul>
       <p>
-        No installations, no sign-ups&mdash;simply click "Start Test" and within seconds you'll know if your
-        connection is ready for high-quality video calls.
+        The live chart at the top of the page visualizes every burst of traffic. Spikes highlight moments where
+        your modem or router needs to ramp up bandwidth, while dips reveal congestion or Wi-Fi interference. By
+        pairing the graph with our connection verdict you get an immediate translation of raw numbers into clear
+        language. If the verdict calls out issues like <em>High latency</em> or <em>Low bandwidth</em>, you can
+        scroll down to the troubleshooting guide below and follow actionable steps. Many users run the test three
+        times a day&mdash;morning, afternoon, and evening&mdash;to identify patterns that correlate with specific
+        activities at home, such as video streaming or large file backups.
       </p>
+      <h3>Download, Upload, and Real-World Capacity</h3>
+      <p>
+        Download speed controls how clearly you can see your colleagues, how fast shared screens load, and how
+        smoothly cloud documents update during a meeting. Upload speed is equally critical because every spoken
+        word, webcam frame, and shared slide you produce needs to travel upstream without delay. Speedoodle
+        measures both directions multiple times and averages the performance so that a temporary hiccup does not
+        skew the results. We recommend recording the values in a spreadsheet or using the built-in CSV export to
+        share results with your IT department. Consistent numbers above the recommendations table later on mean
+        you can confidently host webinars, sales demos, and all-hands calls.
+      </p>
+      <h3>Understanding Ping and Jitter</h3>
+      <p>
+        Ping (latency) indicates how quickly data packets travel from your device to the conference platform and
+        back again. Under 50 ms usually feels instant, while anything above 120 ms can cause awkward pauses. Jitter
+        measures the variation between those packets. Imagine a conversation where every fifth word arrives late;
+        that is the effect of jitter on a video call. Speedoodle polls the network repeatedly to surface the
+        highest spike as well as the average so that you can differentiate between a one-off blip and a systemic
+        stability problem. If jitter stays elevated, the checklist below offers ways to tame wireless noise, adjust
+        QoS rules on your router, or schedule calls outside of busy household hours.
+      </p>
+    </section>
+
+    <section class="seo-section" id="improvement-guide">
+      <h2>Step-by-Step Checklist for Crystal-Clear Calls</h2>
+      <p>
+        Improving call quality is less about chasing a single magic number and more about balancing hardware,
+        software, and network usage. Use this checklist as an action plan whenever Speedoodle flags a potential
+        issue. Each step was compiled from hundreds of support conversations with remote workers, educators, and
+        IT teams who needed reliable video conferencing without expensive upgrades.
+      </p>
+      <ol>
+        <li><strong>Reboot and reposition networking gear.</strong> Restart your modem and router, then place the
+          router in an open, elevated location away from microwaves or thick concrete walls.</li>
+        <li><strong>Prioritize your device.</strong> Enable Quality of Service (QoS) on the router and assign
+          priority to the laptop or conference room PC that hosts critical calls.</li>
+        <li><strong>Switch frequency bands.</strong> If you are on a crowded 2.4 GHz network, move to 5 GHz or use
+          a wired Ethernet connection to minimize interference.</li>
+        <li><strong>Close bandwidth hogs.</strong> Pause large cloud backups, video streams, or game downloads while
+          you are on a call. Even smart TVs or security cameras can consume precious upstream capacity.</li>
+        <li><strong>Update firmware and apps.</strong> Keep routers, video conferencing clients, and webcam drivers up
+          to date so they can leverage the latest performance optimizations and security patches.</li>
+        <li><strong>Plan for peak hours.</strong> If your household or office shares a single connection, run
+          Speedoodle tests during busy periods to spot congestion and ask your ISP about higher tiers if necessary.</li>
+      </ol>
+      <p>
+        After completing the checklist, run the test again and compare the CSV exports. Watching the trend lines
+        helps you build a simple before-and-after case study that is persuasive when requesting a better plan from
+        your provider or pitching a mesh Wi-Fi upgrade to management. You can also send colleagues to the
+        <a href="/blog/">Speedoodle blog</a> for in-depth tutorials on QoS rules, packet loss, and remote team setups.
+      </p>
+    </section>
+
+    <section class="seo-section" id="recommended-speeds">
+      <h2>Recommended Internet Speeds for Video Platforms</h2>
+      <p>
+        Use the table below as a benchmark for common call scenarios. The targets blend official recommendations
+        from major platforms with insights from thousands of community tests. Aim for a safety margin of 20&ndash;30%
+        above the minimum so that unexpected guests on your network do not force the call to downgrade quality.
+      </p>
+      <table style="width:100%;border-collapse:collapse;margin:16px 0">
+        <thead>
+          <tr><th style="text-align:left;padding:8px;border-bottom:1px solid var(--border)">Scenario</th><th style="text-align:left;padding:8px;border-bottom:1px solid var(--border)">Download</th><th style="text-align:left;padding:8px;border-bottom:1px solid var(--border)">Upload</th><th style="text-align:left;padding:8px;border-bottom:1px solid var(--border)">Ping Target</th></tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:8px;border-bottom:1px solid var(--border)">1:1 video catch-up</td><td style="padding:8px;border-bottom:1px solid var(--border)">3 Mbps</td><td style="padding:8px;border-bottom:1px solid var(--border)">2 Mbps</td><td style="padding:8px;border-bottom:1px solid var(--border)">&lt; 80 ms</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid var(--border)">Team stand-up (5&ndash;8 people)</td><td style="padding:8px;border-bottom:1px solid var(--border)">6 Mbps</td><td style="padding:8px;border-bottom:1px solid var(--border)">4 Mbps</td><td style="padding:8px;border-bottom:1px solid var(--border)">&lt; 60 ms</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid var(--border)">Webinar with screen share</td><td style="padding:8px;border-bottom:1px solid var(--border)">10 Mbps</td><td style="padding:8px;border-bottom:1px solid var(--border)">6 Mbps</td><td style="padding:8px;border-bottom:1px solid var(--border)">&lt; 50 ms</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid var(--border)">Large all-hands (20+ attendees)</td><td style="padding:8px;border-bottom:1px solid var(--border)">20 Mbps</td><td style="padding:8px;border-bottom:1px solid var(--border)">10 Mbps</td><td style="padding:8px;border-bottom:1px solid var(--border)">&lt; 40 ms</td></tr>
+          <tr><td style="padding:8px">Live streaming with simultaneous recording</td><td style="padding:8px">25 Mbps</td><td style="padding:8px">12 Mbps</td><td style="padding:8px">&lt; 30 ms</td></tr>
+        </tbody>
+      </table>
+      <p>
+        If your results fall short, consider contacting your ISP about a higher tier or switching to fiber service
+        where available. Many providers will loan a newer modem or gateway upon request, and that alone can provide
+        a noticeable improvement. Businesses that host regular training sessions can dedicate a separate connection
+        to conference rooms to isolate mission-critical meetings from guest Wi-Fi traffic.
+      </p>
+    </section>
+
+    <section class="seo-section" id="video-faq">
+      <h2>Video Call Speed Test FAQs</h2>
+      <details>
+        <summary><strong>How often should I run the test?</strong></summary>
+        <p>We recommend weekly spot checks plus additional tests before major events. Testing at different times of
+          day helps you detect congestion from neighbors or coworkers who share the same ISP infrastructure.</p>
+      </details>
+      <details>
+        <summary><strong>Can I use Speedoodle for non-video tasks?</strong></summary>
+        <p>Absolutely. The metrics we capture apply to gaming, cloud backups, and large data transfers. The verdict
+          labels simply prioritize language that is easy to understand for video call troubleshooting.</p>
+      </details>
+      <details>
+        <summary><strong>Does the test store or sell my data?</strong></summary>
+        <p>No. All measurements happen directly in your browser. We do not require an account, and we do not share
+          results with ISPs or advertisers. You remain in full control of your network diagnostics.</p>
+      </details>
+      <details>
+        <summary><strong>Why do results differ from other speed tests?</strong></summary>
+        <p>Different tools use distinct server locations, protocols, and sample sizes. Speedoodle emphasizes
+          real-world video conferencing behavior, which may surface latency or jitter issues that generic tests miss.</p>
+      </details>
+      <details>
+        <summary><strong>What should I do if packet loss appears during the test?</strong></summary>
+        <p>Packet loss often points to overloaded routers or noisy Wi-Fi. Try switching to Ethernet, reducing the
+          number of active devices, or consulting our <a href="/blog/understanding-packet-loss-video-meetings.html">packet loss
+          troubleshooting guide</a> for advanced fixes.</p>
+      </details>
+      <details>
+        <summary><strong>How can teams share these insights?</strong></summary>
+        <p>Use the CSV export and send a link to the <a href="/blog/lowering-latency-hybrid-teams.html">hybrid teams latency
+          article</a>. Together they give IT managers a clear picture of which offices or remote employees need extra support.</p>
+      </details>
     </section>
 
     <footer style="text-align:center;color:var(--muted);font-size:12px;margin-top:8px">© 2025 Speedoodle. Results may vary by server, browser, and network.</footer>
