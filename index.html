@@ -126,6 +126,36 @@
     ]
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Speedoodle",
+    "url": "https://www.speedoodle.com/",
+    "logo": "https://www.speedoodle.com/logo.png",
+    "sameAs": [],
+    "contactPoint": [{
+      "@type": "ContactPoint",
+      "email": "hello@speedoodle.com",
+      "contactType": "customer support",
+      "availableLanguage": ["en"]
+    }]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.speedoodle.com/"
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <div class="container">
@@ -133,9 +163,16 @@
       <p class="brand">Speedoodle <span style="color:var(--teal)">🚀</span></p>
       <h1>Video Call Speed Test</h1>
       <p class="tagline">Speedoodle helps you check your internet quality for Zoom, Google Meet, and Microsoft Teams video calls.</p>
+      <p class="tagline" style="margin-top:0.75rem">
+        <a href="#about" style="color:inherit;text-decoration:none">About</a> ·
+        <a href="#metrics" style="color:inherit;text-decoration:none">Results</a> ·
+        <a href="#tips" style="color:inherit;text-decoration:none">Tips</a> ·
+        <a href="#faq" style="color:inherit;text-decoration:none">FAQ</a> ·
+        <a href="#legal" style="color:inherit;text-decoration:none">Legal</a>
+      </p>
     </header>
 
-    <section class="tiles">
+    <section class="tiles" id="metrics">
       <div class="tile"><h3>Download</h3><div id="dlVal" class="value">—</div><span class="unit">Mbps</span></div>
       <div class="tile"><h3>Upload</h3><div id="ulVal" class="value">—</div><span class="unit">Mbps</span><div class="unit" id="uplNote"></div></div>
       <div class="tile"><h3>Ping</h3><div id="pingVal" class="value">—</div><span class="unit">ms</span></div>
@@ -152,7 +189,7 @@
       <div class="chart"><canvas id="speedCanvas"></canvas><div id="speedTip"></div></div>
     </section>
 
-    <section class="grid-4">
+    <section class="grid-4" id="metrics-details">
       <div class="card">
         <h3 style="margin:0 0 10px;color:var(--muted);font-size:14px">Call Quality Score</h3>
         <div class="gauge"><canvas id="scoreCanvas"></canvas><div id="scoreCenter" class="score">0</div></div>
@@ -458,7 +495,7 @@
       </p>
     </section>
 
-    <section class="seo-section" id="policies">
+    <section class="seo-section" id="legal" data-section="policies">
       <h2>Privacy Policy</h2>
       <p>
         We do not sell personal information. Privacy-friendly analytics may be used to improve the site. Tests run
