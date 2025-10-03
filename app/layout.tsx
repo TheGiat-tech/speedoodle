@@ -16,6 +16,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           src="https://www.googletagmanager.com/gtag/js?id=G-LD6QWT7SJ0"
           strategy="afterInteractive"
         />
+        <meta name="google-adsense-account" content="ca-pub-8054613417167519" />
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8054613417167519"
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+        />
         <Script id="google-analytics" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
