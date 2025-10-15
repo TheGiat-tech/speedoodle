@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
 Sitemap: https://www.speedoodle.com/sitemap.xml
-Host: https://www.speedoodle.com
