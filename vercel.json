@@ -1,19 +1,8 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "builds": [
-    { "src": "*.html", "use": "@vercel/static" },
-    { "src": "blog/**/*.html", "use": "@vercel/static" },
-    { "src": "faq/**/*.html", "use": "@vercel/static" },
-    { "src": "site.css", "use": "@vercel/static" },
-    { "src": "style.css", "use": "@vercel/static" },
-    { "src": "public/**/*", "use": "@vercel/static" },
-    { "src": "*.xml", "use": "@vercel/static" },
-    { "src": "*.txt", "use": "@vercel/static" },
-    { "src": "*.svg", "use": "@vercel/static" }
-  ],
-  "routes": [
-    { "src": "^/blog/?$", "dest": "/blog/index.html" },
-    { "src": "^/faq/?$", "dest": "/faq/index.html" }
+  "rewrites": [
+    { "source": "/blog", "destination": "/blog/index.html" },
+    { "source": "/faq", "destination": "/faq/index.html" }
   ]
 }
