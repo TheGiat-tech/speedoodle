@@ -105,7 +105,7 @@
   try{ if('PerformanceObserver' in window){ const po=new PerformanceObserver((list)=>{ const es=list.getEntries(); for(let i=0;i<es.length;i++) longTaskMs += es[i].duration||0; }); po.observe({type:'longtask', buffered:true}); } }catch(_){ }
   const frameDur=[]; (function rafSampler(){ let prev=performance.now(); function s(t){ frameDur.push(t-prev); if(frameDur.length>60) frameDur.shift(); prev=t; requestAnimationFrame(s);} requestAnimationFrame(s);} )();
   setInterval(()=>{
-    const now=performance.now(), dt=(now-lastTick)/1000; lastTick=now; const cpuPct=clamp(100*(longTaskMs/(dt*1000)),0,100); longTaskMs=0; setBadge('cpuBadge',cpuPct); const c=$(id); if(c) c.style.width=cpuPct+'%';
+    const now=performance.now(), dt=(now-lastTick)/1000; lastTick=now; const cpuPct=clamp(100*(longTaskMs/(dt*1000)),0,100); longTaskMs=0; setBadge('cpuBadge',cpuPct); const c=$('cpuBar'); if(c) c.style.width=cpuPct+'%';
     try{ if(performance.memory){ const u=performance.memory.usedJSHeapSize, t=performance.memory.jsHeapSizeLimit; const pct=(u/t)*100; $('memVal').textContent=(u/1e6).toFixed(1)+' MB / '+(t/1e6).toFixed(0)+' MB'; setBadge('memBadge',pct); const b=$('memBar'); if(b) b.style.width=pct+'%'; } }catch(_){ }
   },1500);
 
