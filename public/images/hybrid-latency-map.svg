@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Latency map for hybrid teams</title>
+  <desc id="desc">Illustration of a distributed office map showing latency, jitter and routing waypoints.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0b1120" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)" rx="32" />
+  <g fill="#e0f2fe" font-family="'Inter', 'Segoe UI', sans-serif">
+    <text x="88" y="120" font-size="56" font-weight="600">Lowering latency for hybrid teams</text>
+    <text x="88" y="180" font-size="30">Speedoodle routing insights</text>
+  </g>
+  <g transform="translate(120 240)">
+    <circle cx="160" cy="120" r="110" fill="rgba(59, 130, 246, 0.45)" />
+    <circle cx="420" cy="210" r="110" fill="rgba(96, 165, 250, 0.45)" />
+    <circle cx="700" cy="120" r="110" fill="rgba(147, 197, 253, 0.35)" />
+    <circle cx="960" cy="250" r="110" fill="rgba(191, 219, 254, 0.35)" />
+    <g fill="#f8fafc" font-family="'Inter', 'Segoe UI', sans-serif" font-size="26" font-weight="500">
+      <text x="110" y="130">Edge POP 22 ms</text>
+      <text x="370" y="220">SD-WAN 18 ms</text>
+      <text x="650" y="130">ISP peer 26 ms</text>
+      <text x="900" y="260">Home office 34 ms</text>
+    </g>
+    <polyline points="160,120 420,210 700,120 960,250" fill="none" stroke="#bfdbfe" stroke-width="6" stroke-dasharray="12 20" />
+  </g>
+</svg>

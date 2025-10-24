@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Packet loss diagnostic illustration</title>
+  <desc id="desc">Waveform showing missing packets and corrective steps for video meetings.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#082f49" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)" rx="32" />
+  <g fill="#f8fafc" font-family="'Inter', 'Segoe UI', sans-serif">
+    <text x="90" y="120" font-size="56" font-weight="600">Packet loss in meetings</text>
+    <text x="90" y="180" font-size="30">Speedoodle telemetry cues</text>
+  </g>
+  <polyline points="90,330 210,260 330,360 450,210 570,390 690,240 810,360 930,220 1050,340" fill="none" stroke="#facc15" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+  <g fill="#fef3c7" font-family="'Inter', 'Segoe UI', sans-serif" font-size="26">
+    <text x="180" y="280">Lost burst</text>
+    <text x="430" y="220">Re-transmit</text>
+    <text x="720" y="240">FEC active</text>
+    <text x="950" y="220">Alert</text>
+  </g>
+  <g transform="translate(90 420)" fill="#dcfce7" font-family="'Inter', 'Segoe UI', sans-serif" font-size="28">
+    <text x="0" y="0">✔ Inspect cable for damage</text>
+    <text x="0" y="48">✔ Prioritize QoS for conferencing</text>
+    <text x="0" y="96">✔ Re-run Speedoodle test after fix</text>
+  </g>
+</svg>
