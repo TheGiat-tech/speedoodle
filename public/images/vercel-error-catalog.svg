@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Vercel error codes catalog illustration</title>
+  <desc id="desc">List view representing deployment error codes with status colors and actions.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#4338ca" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)" rx="32" />
+  <g transform="translate(96 120)" fill="#ede9fe" font-family="'Inter', 'Segoe UI', sans-serif">
+    <text x="0" y="0" font-size="56" font-weight="600">Vercel error cheatsheet</text>
+    <text x="0" y="60" font-size="30">Speedoodle developer notes</text>
+  </g>
+  <g transform="translate(96 210)">
+    <rect width="1008" height="360" rx="28" fill="rgba(129, 140, 248, 0.35)" />
+    <g font-family="'Inter', 'Segoe UI', sans-serif" font-size="28" fill="#ede9fe">
+      <text x="48" y="90">BUILD_FAILED · Misconfigured env vars</text>
+      <text x="48" y="150">FUNCTION_TIMEOUT · Cold starts or loops</text>
+      <text x="48" y="210">NOT_FOUND · Routing fallback missing</text>
+      <text x="48" y="270">RATE_LIMITED · Burst protection triggered</text>
+      <text x="48" y="330">SOLUTION · Compare logs & rerun Speedoodle test</text>
+    </g>
+  </g>
+</svg>

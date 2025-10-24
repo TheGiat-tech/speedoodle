@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Stabilizing video call quality illustration</title>
+  <desc id="desc">Dashboard mockup displaying bandwidth, ping and jitter improvements for video calls.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#0f766e" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)" rx="32" />
+  <g transform="translate(80 120)" fill="#e0f2f1" font-family="'Inter', 'Segoe UI', sans-serif">
+    <text x="0" y="0" font-size="58" font-weight="600">Smoother video calls</text>
+    <text x="0" y="60" font-size="32">Checklist for steady streams</text>
+  </g>
+  <g transform="translate(80 210)">
+    <rect width="500" height="360" rx="28" fill="rgba(15, 118, 110, 0.55)" />
+    <g fill="#ecfeff" font-family="'Inter', 'Segoe UI', sans-serif" font-size="28">
+      <text x="48" y="90">✓ Switch to Ethernet</text>
+      <text x="48" y="150">✓ Reboot router firmware</text>
+      <text x="48" y="210">✓ Enable QoS prioritization</text>
+      <text x="48" y="270">✓ Close background sync</text>
+    </g>
+  </g>
+  <g transform="translate(640 210)">
+    <rect width="480" height="360" rx="28" fill="rgba(13, 148, 136, 0.35)" />
+    <g fill="#ccfbf1" font-family="'Inter', 'Segoe UI', sans-serif" font-size="30">
+      <text x="48" y="90">Ping: 28 ms → 16 ms</text>
+      <text x="48" y="150">Jitter: 18 ms → 8 ms</text>
+      <text x="48" y="210">Upload: 4 Mbps → 9 Mbps</text>
+      <text x="48" y="270">Speedoodle session log</text>
+    </g>
+  </g>
+</svg>
