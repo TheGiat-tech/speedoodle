@@ -88,7 +88,7 @@
 
   // ===== endpoints & helpers =====
   const CF_DOWN='https://speed.cloudflare.com/__down?bytes=';
-  const CF_UP  ='https://speed.cloudflare.com/__up';
+  const CF_UP  ='/api/upload';
   function fetchWithTimeout(url,opts={},timeoutMs=2000){ const c=('AbortController' in window)?new AbortController():null; if(c) opts.signal=c.signal; const t=setTimeout(()=>{ if(c) c.abort(); }, timeoutMs); return fetch(url,opts).finally(()=>clearTimeout(t)); }
   function safeFillRandom(u8){ try{ if(!(crypto&&crypto.getRandomValues)) return; for(let i=0;i<u8.byteLength;i+=65536){ crypto.getRandomValues(u8.subarray(i,Math.min(i+65536,u8.byteLength))); } }catch(_){} }
 
