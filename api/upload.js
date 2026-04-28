@@ -1,3 +1,5 @@
+const MAX_BYTES = 5 * 1024 * 1024; // 5 MB per request
+
 module.exports = (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -13,8 +15,17 @@ module.exports = (req, res) => {
     return;
   }
 
-  req.on('data', () => {});
+  let received = 0;
+  req.on('data', (chunk) => {
+    received += chunk.length;
+    if (received > MAX_BYTES) {
+      res.status(413).end();
+      req.destroy();
+    }
+  });
   req.on('end', () => {
-    res.status(200).end();
+    if (!res.writableEnded) {
+      res.status(200).end();
+    }
   });
 };
